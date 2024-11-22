@@ -1,0 +1,42 @@
+{
+  "language": {
+    "en": "Tiếng Anh",
+    "ko": "Tiếng Hàn",
+    "vi": "Tiếng Việt",
+    "mo": "Tiếng Việt",
+    "mn": "Монгол"
+  },
+  "home": {
+    "title": "Photomong",
+    "takePhoto": "Зураг авах",
+    "selectPhoto": "Зураг сонгох",
+    "settings": "Тохиргоо"
+  },
+  "filter": {
+    "title": "Шүүлтүүр",
+    "reset": "Дахин тохируулах",
+    "apply": "Хэрэгжүүлэх",
+    "intensity": "Эрчим",
+    "by": "Шүүлтүүрээр",
+    "confirm": "Баталгаажуулах",
+    "noFilter": "Шүүлтүүр байхгүй"
+  },
+  "menu": {
+    "goBack": "Буцах",
+    "filter": "Шүүлтүүр",
+    "frame": "Хүрээ",
+    "payment": "Төлбөр",
+    "photography": "Гэрэл зураг",
+    "printing": "Хэвлэх",
+    "photomong": "Photomong"
+  },
+  "brightness": "Гэрэлтэлт",
+  "items": {
+    "personality": "Хувийн",
+    "natural": "Байгалийн",
+    "perfect": "Төгс",
+    "classic": "Сонгодог",
+    "bnw": "Хар цагаан",
+    "skin": "Арьс"
+  }
+}

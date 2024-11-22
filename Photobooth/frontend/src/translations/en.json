@@ -1,0 +1,41 @@
+{
+  "language": {
+    "en": "English",
+    "ko": "Korean",
+    "vi": "Vietnamese",
+    "mn": "Mongolian"
+  },
+  "home": {
+    "title": "Beauty Camera",
+    "takePhoto": "LET'S START",
+    "selectPhoto": "Select a photo",
+    "settings": "Settings"
+  },
+  "filter": {
+    "title": "Filter",
+    "reset": "Reset",
+    "apply": "Apply",
+    "intensity": "INTENSITY",
+    "by": "By",
+    "confirm": "CONFIRM",
+    "noFilter": "NO FILTER"
+  },
+  "menu": {
+    "goBack": "Go back",
+    "filter": "Filter",
+    "frame": "Frame",
+    "payment": "Payment",
+    "photography": "Photography",
+    "printing": "Printing",
+    "photomong": "Photomong"
+  },
+  "brightness": "Brightness",
+  "items": {
+    "personality": "Personality",
+    "natural": "Natural Look",
+    "perfect": "Perfect Pink",
+    "classic": "Classic",
+    "bnw": "B&W",
+    "skin": "Skin Smooth"
+  }
+}

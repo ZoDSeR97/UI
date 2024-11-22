@@ -1,0 +1,41 @@
+{
+    "language": {
+      "en": "Tiếng Anh",
+      "ko": "Tiếng Hàn",
+      "vi": "Tiếng Việt",
+      "mn":"Tiếng Mông Cổ"
+    },
+    "home": {
+      "title": "Photomong",
+      "takePhoto": "Bắt đầu chụp",
+      "selectPhoto": "Chọn ảnh",
+      "settings": "Cài đặt"
+    },
+    "filter": {
+      "title": "Bộ lọc",
+      "reset": "Reset",
+      "apply": "Cập nhật",
+      "intensity": "Độ mạnh",
+      "by": "Bộ lọc theo",
+      "confirm": "Xác nhận",
+      "noFilter": "Không có bộ lọc nào"
+    },
+    "menu": {
+      "goBack": "Quay lại",
+      "filter": "Bộ lọc",
+      "frame": "Khung ảnh",
+      "payment": "Thanh toán",
+      "photography": "Chụp ảnh",
+      "printing": "In ảnh",
+      "photomong": "Photomong"
+    },
+    "brightness": "Độ sáng",
+    "items": {
+      "personality": "Cá nhân",
+      "natural": "Tự nhiên",
+      "perfect": "Hoàn hảo",
+      "classic": "Cổ điển",
+      "bnw": "Trắng đen",
+      "skin": "Da"
+    }
+  }
