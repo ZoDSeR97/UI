@@ -131,7 +131,7 @@ export default function Layout() {
                                 align: "center",
                                 loop: true,
                             }}
-                            className="w-[80%] mx-auto"
+                            className="w-10/12 mx-auto"
                         >
                             <CarouselContent>
                                 {layouts.map((layout, index) => (

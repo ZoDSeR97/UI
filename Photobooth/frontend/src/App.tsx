@@ -1,4 +1,4 @@
-import { BrowserRouter as Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import './App.css'
 
 import Home from './screens/Home';
@@ -11,8 +11,8 @@ import QR from './screens/Payment/QR';
 import Promo from './screens/Payment/Promo';
 import Cash from './screens/Payment/Cash';
 import Result from './screens/Payment/Result';
-/* import Photo from './screens/Photo/Photo';
-import Choose from './screens/Photo/Choose';
+import Photoshoot from './screens/Photoshoot/Photo';
+/* import Choose from './screens/Photo/Choose';
 import Filter from './screens/Filter';
 import Sticker from './screens/Sticker';
 import Print from './screens/Print';
@@ -34,8 +34,8 @@ function App() {
       <Route path="/payment-promo" element={<Promo />} />
       <Route path="/payment-cash" element={<Cash />} />
       <Route path="/payment-result" element={<Result />} />
-      {/* <Route path="/photo" element={<Photo />} />
-      <Route path="/photo-choose" element={<Choose />} />
+      <Route path="/photo" element={<Photoshoot />} />
+      {/* <Route path="/photo-choose" element={<Choose />} />
       <Route path="/filter" element={<Filter />} />
       <Route path="/sticker" element={<Sticker />} />
       <Route path="/print" element={<Print />} />

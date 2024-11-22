@@ -33,7 +33,7 @@ export default function Promo() {
         try {
             setIsSubmitting(true)
             const deviceNumber = import.meta.env.VITE_REACT_APP_DEVICE_NUMBER;
-            const response = await fetch(`${import.meta.env.VITE_REACT_APP_BE_PROD}/payments/api/redeem?device=${deviceNumber}&code=${code}&amount=${frameAmount}`);
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND}/payments/api/redeem?device=${deviceNumber}&code=${code}&amount=${frameAmount}`);
             const paymentData = await response.json();
             if (paymentData.status === "OK") {
                 sessionStorage.setItem('orderCodeNum', paymentData.order_code);
@@ -128,13 +128,13 @@ export default function Promo() {
                     </div>
 
                     <Card>
-                        <CardContent className="p-6">
+                        <CardContent className="p-11">
                             <div className="space-y-6">
                                 <Input
                                     type="text"
                                     value={code}
                                     readOnly
-                                    className="text-center text-2xl tracking-wider"
+                                    className="text-center text-2xl tracking-wider text-pink-600"
                                     maxLength={10}
                                 />
 

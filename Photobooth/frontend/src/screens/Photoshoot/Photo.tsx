@@ -1,127 +1,146 @@
-import { useCallback, useEffect, useRef, useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Camera, Check, Repeat } from 'lucide-react'
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
+import { useEffect, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from "framer-motion";
+import { Camera, Check, Repeat } from 'lucide-react';
+import { cn, playAudio } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Photoshoot() {
-  const [photos, setPhotos] = useState<string[]>([])
-  const [currentPhoto, setCurrentPhoto] = useState(0)
-  const [countdown, setCountdown] = useState(8)
-  const [isCapturing, setIsCapturing] = useState(false)
-  const [selectedRetake, setSelectedRetake] = useState<number | null>(null)
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en');
+  const [countdown, setCountdown] = useState(8);
+  const [isCapturing, setIsCapturing] = useState(false);
+  const [selectedRetake, setSelectedRetake] = useState<number | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [uuid, setUuid] = useState(sessionStorage.getItem("uuid") || null);
 
-  // Initialize camera
+  const sleep = (ms: number) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
   useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ video: { width: 1280, height: 720 }, audio: false })
-      .then((stream) => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream
-        }
-      })
-      .catch((err) => console.error("Error accessing camera:", err))
-
-    return () => {
-      if (videoRef.current?.srcObject) {
-        const tracks = (videoRef.current.srcObject as MediaStream).getTracks()
-        tracks.forEach((track) => track.stop())
-      }
-    }
-  }, [])
+    const newUuid = uuidv4();
+    console.log(newUuid)
+    setUuid(newUuid);
+    const initializeLiveView = async () => {
+      await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/start_live_view`);
+    };
+    initializeLiveView();
+    playAudio("/src/assets/audio/look_up_smile.wav");
+  }, []);
 
   // Countdown and photo capture logic
   useEffect(() => {
-    if (isCapturing && countdown > 0) {
+    if (uuid && countdown > 0) {
+      if (countdown == 4 || countdown == 8)
+        playAudio("/src/assets/audio/count.wav");
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
       return () => clearTimeout(timer)
-    } else if (isCapturing && countdown === 0) {
+    } else if (countdown === 0) {
       capturePhoto()
     }
-  }, [countdown, isCapturing])
+  }, [countdown, uuid])
 
-  const capturePhoto = useCallback(() => {
-    if (videoRef.current && canvasRef.current) {
-      const video = videoRef.current
-      const canvas = canvasRef.current
-      const context = canvas.getContext("2d")
-
-      if (context) {
-        // Set canvas dimensions to match video
-        canvas.width = video.videoWidth
-        canvas.height = video.videoHeight
-
-        // Draw the current video frame
-        context.drawImage(video, 0, 0, canvas.width, canvas.height)
-
-        // Convert to base64 image
-        const photoData = canvas.toDataURL("image/png")
-
-        if (selectedRetake !== null) {
-          // Replace photo at selected index
-          setPhotos(prev => {
-            const newPhotos = [...prev]
-            newPhotos[selectedRetake] = photoData
-            return newPhotos
-          })
-          setSelectedRetake(null)
-        } else {
-          // Add new photo
-          setPhotos(prev => [...prev, photoData])
-          setCurrentPhoto(prev => prev + 1)
+  const capturePhoto = async () => {
+    await sleep(100);
+    setIsCapturing(true);
+    await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/capture`,
+      {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ uuid: uuid })
+      }
+    )
+    const data = await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/get_photo?uuid=${uuid}`).then(res=>res.json())
+    if (data && data.images && data.images.length > 0) {
+      const latestImage = data.images[data.images.length - 1];
+      if (data.videos != undefined) {
+        if (data.videos.length != 0) {
+          const videoUrl = data.videos[0].url
+          sessionStorage.setItem("videoUrl", videoUrl)
         }
       }
+      if (selectedRetake !== null) {
+        // Replace photo at selected index
+        setPhotos(prev => {
+          const newPhotos = [...prev]
+          newPhotos[selectedRetake] = latestImage
+          return newPhotos
+        })
+        setSelectedRetake(null)
+      } else {
+        // Add new photo
+        setPhotos(prev => [...prev, latestImage])
+      }
     }
-
     setIsCapturing(false)
-    setCountdown(8)
-  }, [selectedRetake])
+  };
 
   const handleRetake = (index: number) => {
     setSelectedRetake(index)
-    setIsCapturing(true)
     setCountdown(8)
   }
 
-  const startCapture = () => {
-    if (photos.length < 8 && !isCapturing) {
-      setIsCapturing(true)
-    }
-  }
-
   useEffect(() => {
-    if (photos.length === 0) {
+    if (photos.length === 0 || photos.length < 8) {
       startCapture()
     }
   }, [photos])
 
+  const startCapture = () => {
+    if (photos.length < 8 && !isCapturing) {
+      setCountdown(8)
+    }
+  }
+
+  const goToSelection = async () => {
+    if (photos.length > 0 && photos.length === 8) {
+      sessionStorage.setItem("uuid", uuid);
+
+      sessionStorage.setItem('photos', JSON.stringify(photos));
+
+      sessionStorage.setItem('choosePhotos', JSON.stringify(photos.map(photo => photo.id)));
+      
+      await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/stop_live_view`)
+      navigate("/photo-choose");
+    }
+  };
+
   return (
-    <div className="fixed flex min-h-screen flex-col bg-background inset-0 bg-pink-50 px-1 py-6 mb-36">
-      <div className="flex flex-1 items-center justify-center p-6">
-        <div className="grid w-full max-w-7xl gap-6 md:grid-cols-[1fr_400px]">
+    <div className="relative flex flex-col bg-background py-6">
+      {/* Message */}
+      <div className="relative top-4 left-1/2 -translate-x-1/2 text-center">
+        <h2 className="text-2xl font-bold tracking-tight text-pink-500">
+          JUST LOOK UP AND SMILE
+        </h2>
+      </div>
+      <div className="flex items-center justify-center p-6">
+        <div className="flex w-full max-w-7xl gap-6 md:grid-cols-[1fr_400px]">
           {/* Camera Preview */}
-          <div className="relative overflow-hidden rounded-xl border bg-muted">
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              muted
-              className="h-full w-full object-cover"
-            />
+          <div className="flex-shrink-0 relative overflow-hidden rounded-xl border bg-muted">
+            {
+              <img
+                src={`${import.meta.env.VITE_REACT_APP_API}/api/video_feed`}
+                alt="Live View"
+                className='w-full'
+              />
+            }
             <canvas ref={canvasRef} className="hidden" />
 
             {/* Countdown Overlay */}
             <AnimatePresence>
-              {isCapturing && (
+              {!isCapturing && (
                 <motion.div
                   initial={{ opacity: 0, scale: 2 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0 }}
-                  className="absolute inset-0 flex items-center justify-center bg-background/50 text-9xl font-bold"
+                  className="absolute inset-0 flex items-center justify-center bg-background/50 text-9xl font-bold text-pink-500"
                 >
                   {countdown}
                 </motion.div>
@@ -130,7 +149,7 @@ export default function Photoshoot() {
           </div>
 
           {/* Photos Grid */}
-          <Card className="flex flex-col p-4">
+          <Card className="flex flex-col p-4 text-pink-500">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold">Photos ({photos.length}/8)</h2>
               <Progress value={(photos.length / 8) * 100} className="w-32" />
@@ -148,7 +167,7 @@ export default function Photoshoot() {
                   {photos[index] ? (
                     <>
                       <img
-                        src={photos[index]}
+                        src={photos[index].url}
                         alt={`Photo ${index + 1}`}
                         className="h-full w-full object-cover"
                       />
@@ -157,6 +176,7 @@ export default function Photoshoot() {
                           size="icon"
                           variant="secondary"
                           onClick={() => handleRetake(index)}
+                          disabled={photos.length < 8 || isCapturing}
                         >
                           <Repeat className="h-4 w-4" />
                         </Button>
@@ -174,14 +194,13 @@ export default function Photoshoot() {
             {/* Action Buttons */}
             <div className="mt-4 flex justify-end gap-2">
               <Button
-                variant="outline"
                 onClick={() => setPhotos([])}
-                disabled={photos.length === 0 || isCapturing}
+                disabled={photos.length < 8 || isCapturing}
               >
                 Reset All
               </Button>
               <Button
-                onClick={() => onComplete?.(photos)}
+                onClick={goToSelection}
                 disabled={photos.length < 8 || isCapturing}
               >
                 <Check className="mr-2 h-4 w-4" />
@@ -193,7 +212,7 @@ export default function Photoshoot() {
       </div>
 
       {/* Cute Character */}
-      <div className="absolute bottom-8 left-8">
+      <div className="absolute top-8 left-8">
         <motion.div
           animate={{
             y: [0, -10, 0],
@@ -205,18 +224,11 @@ export default function Photoshoot() {
           }}
         >
           <img
-            src="/placeholder.svg?height=150&width=150"
+            src="/src/assets/icon/GS25.png"
             alt="Mascot"
-            className="h-[150px] w-[150px]"
+            className="max-w-60"
           />
         </motion.div>
-      </div>
-
-      {/* Message */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-primary">
-          JUST LOOK UP AND SMILE
-        </h2>
       </div>
     </div>
   )
