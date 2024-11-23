@@ -9,6 +9,8 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { v4 as uuidv4 } from 'uuid';
 
+type Language = 'en' | 'ko' | 'vi' | 'mn'
+
 export default function Photoshoot() {
   const { t } = useTranslation();
   const navigate = useNavigate();
