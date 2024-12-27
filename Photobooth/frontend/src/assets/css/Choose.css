@@ -1,0 +1,389 @@
+.choose-photo-row {
+    /* background-color: red; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.choose-photo-item {
+    width: 190px;
+    height: 122px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 1%;
+}
+
+/* Frame 5 cut **/
+
+.choose-photo-item-5cut {
+    width: 190px;
+    height: 122px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 1%;
+}
+
+.choose-photo-item-5cut-0-0 {
+    width: 210px;
+    height: 210px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 1%;
+    position: fixed;
+    top: 26%;
+    left: 16%;
+}
+
+.choose-photo-item-5cut-0-1 {
+    width: 210px;
+    height: 210px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 1%;
+    position: fixed;
+    top: 26%;
+    left: 25.5%;
+}
+
+.choose-photo-item-5cut-1-0 {
+    width: 210px;
+    height: 210px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 1%;
+    position: fixed;
+    top: 45%;
+    left: 16%;
+}
+
+.choose-photo-item-5cut-1-1 {
+    width: 210px;
+    height: 210px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 1%;
+    position: fixed;
+    top: 45%;
+    left: 25.5%;
+}
+
+.choose-photo-item-5cut-last-line {
+    width: 439px;
+    height: 250px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 1%;
+    position: fixed;
+    top: 64%;
+    left: 15.9%;
+}
+
+/** Frame 4cut **/
+.choose-photo-item-4cut-0-0.clicked,
+.choose-photo-item-4cut-0-1.clicked,
+.choose-photo-item-4cut-1-0.clicked,
+.choose-photo-item-4cut-1-1.clicked,
+.choose-photo-item-3cut-0-0.clicked,
+.choose-photo-item-3cut-0-1.clicked,
+.choose-photo-item-2cut-0-0.clicked,
+.choose-photo-item-2cut-0-1.clicked,
+.choose-photo-item6-0-0.clicked,
+.choose-photo-item6-0-1.clicked,
+.choose-photo-item6-1-0.clicked,
+.choose-photo-item6-1-1.clicked,
+.choose-photo-item6-2-0.clicked,
+.choose-photo-item6-2-1.clicked,
+.choose-photo-item-0-0.clicked,
+.choose-photo-item-0-1.clicked,
+.choose-photo-item-1-0.clicked,
+.choose-photo-item-1-1.clicked,
+.choose-photo-item-2-0.clicked,
+.choose-photo-item-2-1.clicked,
+.choose-photo-item-3-0.clicked,
+.choose-photo-item-3-1.clicked {
+    border: 6px solid red;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.choose-photo-item-4cut-0-0 {
+   width: 150px;
+   height: 110px;
+   background-size: cover;
+   background-repeat: no-repeat;
+   background-position: center;
+   margin: 1%;
+   position: absolute;
+   top: 31.8%;
+   left: 27.6%;
+}
+
+.choose-photo-item-4cut-0-1 {
+    width: 150px;
+   height: 110px;
+   background-size: cover;
+   background-repeat: no-repeat;
+   background-position: center;
+   margin: 1%;
+   position: absolute;
+   top: 31.8%;
+   left: 50%;
+}
+
+.choose-photo-item-4cut-1-0 {
+    width: 150px;
+    height: 110px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 47.8%;
+    left: 27.6%;
+}
+
+.choose-photo-item-4cut-1-1 {
+    width: 150px;
+   height: 110px;
+   background-size: cover;
+   background-repeat: no-repeat;
+   background-position: center;
+   margin: 1%;
+   position: absolute;
+   top: 47.8%;
+   left: 50%;
+}
+
+/** Frame 3cut **/
+
+.choose-photo-item-3cut-top-line {
+    width: 450px;
+    height: 255px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: fixed;
+    top: 33%;
+    left: 16%;
+}
+
+.choose-photo-item-3cut-0-0 {
+    width: 210px;
+    height: 310px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: fixed;
+    top: 57%;
+    left: 22%;
+}
+
+.choose-photo-item-3cut-0-1 {
+    width: 210px;
+    height: 310px;
+    background-size: cover;
+    background-repeat: revert-layer;
+    background-position: center;
+    margin: 1%;
+    position: fixed;
+    top: 57%;
+    left: 26%;
+}
+
+/** Frame 2cut **/
+.choose-photo-item-2cut-0-0 {
+
+    width: 252px;
+    height: 285px;
+    background-size: cover;
+    background-repeat: revert-layer;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 25.6%;
+    left: 12%;
+}
+
+.choose-photo-item-2cut-0-1 {
+    width: 252px;
+    height: 285px;
+    background-size: cover;
+    background-repeat: revert-layer;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 25.6%;
+    left: 50%;
+}
+
+/** Frame 6 cut **/
+.choose-photo-item6-0-0 {
+    width: 163.2px;
+   height: 162px;
+   background-size: cover;
+   background-repeat: no-repeat;
+   background-position: center;
+   margin: 1%;
+   position: absolute;
+   top: 7%;
+   left: 26.3%;
+}
+
+.choose-photo-item6-0-1 {
+    width: 163.2px;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 7%;
+    left: 51.3%;
+}
+
+.choose-photo-item6-1-0 {
+    width: 163.2px;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 30%;
+    left: 26.3%;
+}
+
+.choose-photo-item6-1-1 {
+    width: 163.2px;
+   height: 162px;
+   background-size: cover;
+   background-repeat: no-repeat;
+   background-position: center;
+   margin: 1%;
+   position: absolute;
+   top: 30%;
+   left: 51.3%;
+}
+
+.choose-photo-item6-2-0 {
+    width: 163.2px;
+   height: 162px;
+   background-size: cover;
+   background-repeat: no-repeat;
+   background-position: center;
+   margin: 1%;
+   position: absolute;
+   top: 53%;
+   left: 26.3%;
+}
+
+.choose-photo-item6-2-1 {
+    width: 163.2px;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 53%;
+    left: 51.3%;
+}
+
+/** Frame 8 cut no f11**/
+.choose-photo-item-0-0 {
+    width: 176px;
+    height: 122px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 8%;
+    left: 23.9%;
+}
+
+.choose-photo-item-0-1 {
+    width: 176px;
+    height: 122px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 8%;
+    left: 52%;
+}
+
+.choose-photo-item-1-0 {
+    width: 176px;
+    height: 122px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 25.4%;
+    left: 23.9%;
+}
+
+.choose-photo-item-1-1 {
+    width: 176px;
+    height: 122px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 25.4%;
+    left: 52%;
+}
+
+.choose-photo-item-2-0 {
+    width: 176px;
+    height: 122px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 42.5%;
+    left: 23.9%;
+}
+
+.choose-photo-item-2-1 {
+    width: 176px;
+    height: 122px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 42.5%;
+    left: 52%;
+}
+
+.choose-photo-item-3-0 {
+    width: 176px;
+    height: 122px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 60%;
+    left: 23.9%;
+}
+
+.choose-photo-item-3-1 {
+    width: 176px;
+    height: 122px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 60%;
+    left: 52%;
+}

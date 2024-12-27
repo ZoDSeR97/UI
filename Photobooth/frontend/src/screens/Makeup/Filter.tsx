@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { ChevronLeft, Heart, ImageIcon, Moon, Sparkles, Sun } from 'lucide-react'
@@ -86,8 +84,7 @@ export default function FilterPage() {
 
     useEffect(() => {
         // Simulating loading selected photos from session storage
-        const storedPhotos = [0, 1, 2, 3] // Replace with actual logic to load from session storage
-        setSelectedPhotos(storedPhotos)
+        setSelectedPhotos(sessionStorage.getItem('choosePhotos'))
     }, [])
 
     useEffect(() => {
@@ -142,7 +139,7 @@ export default function FilterPage() {
                                 key={filter.id}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                onClick={() => setSelectedFilter(filter.id)}
+                                onClick={() => selectedFilter === filter.id? setSelectedFilter("") : setSelectedFilter(filter.id)}
                                 className={cn(
                                     "flex flex-col items-center rounded-lg border-2 p-4 transition-colors",
                                     selectedFilter === filter.id
