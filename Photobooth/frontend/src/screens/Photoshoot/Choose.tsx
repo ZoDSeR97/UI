@@ -81,7 +81,7 @@ export default function Choose() {
         sessionStorage.setItem('choosePhotos', JSON.stringify(selectedPhotos));
 
         if (selectedPhotos.length === maxSelections) {
-            const result = await copyImageApi();
+            //const result = await copyImageApi();
             navigate("/filter");
         }
     }

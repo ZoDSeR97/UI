@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from "framer-motion";
@@ -28,28 +28,16 @@ export default function Photoshoot() {
 
   useEffect(() => {
     const newUuid = uuidv4();
-    console.log(newUuid)
     setUuid(newUuid);
     const initializeLiveView = async () => {
-      await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/start_live_view`);
+      await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/start_live_view`)
+        .then(response => console.log(response));
     };
     initializeLiveView();
     playAudio("/src/assets/audio/look_up_smile.wav");
   }, []);
 
-  // Countdown and photo capture logic
-  useEffect(() => {
-    if (uuid && countdown > 0) {
-      if (countdown == 4 || countdown == 8)
-        playAudio("/src/assets/audio/count.wav");
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
-      return () => clearTimeout(timer)
-    } else if (countdown === 0) {
-      capturePhoto()
-    }
-  }, [countdown, uuid])
-
-  const capturePhoto = async () => {
+  const capturePhoto = useCallback(async () => {
     await sleep(100);
     setIsCapturing(true);
     await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/capture`,
@@ -82,24 +70,36 @@ export default function Photoshoot() {
       }
     }
     setIsCapturing(false)
-  };
+  },[selectedRetake, uuid]);
+
+  // Countdown and photo capture logic
+  useEffect(() => {
+    if (uuid && countdown > 0) {
+      if (countdown == 4 || countdown == 8)
+        playAudio("/src/assets/audio/count.wav");
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
+      return () => clearTimeout(timer)
+    } else if (countdown === 0) {
+      capturePhoto()
+    }
+  }, [capturePhoto, countdown, uuid])
 
   const handleRetake = (index: number) => {
     setSelectedRetake(index)
     setCountdown(8)
   }
 
+  const startCapture = useCallback(() => {
+    if (photos.length < 8 && !isCapturing) {
+      setCountdown(8)
+    }
+  },[isCapturing, photos.length])
+
   useEffect(() => {
     if (photos.length === 0 || photos.length < 8) {
       startCapture()
     }
-  }, [photos])
-
-  const startCapture = () => {
-    if (photos.length < 8 && !isCapturing) {
-      setCountdown(8)
-    }
-  }
+  }, [photos, startCapture])
 
   const goToSelection = async () => {
     if (photos.length > 0 && photos.length === 8) {
@@ -123,7 +123,7 @@ export default function Photoshoot() {
         </h2>
       </div>
       <div className="flex items-center justify-center p-6">
-        <div className="flex w-full max-w-7xl gap-6 md:grid-cols-[1fr_400px]">
+        <div className="flex w-full justify-center max-w-7xl gap-6 md:grid-cols-[1fr_400px]">
           {/* Camera Preview */}
           <div className="flex-shrink-0 relative overflow-hidden rounded-xl border bg-muted">
             {
@@ -178,7 +178,7 @@ export default function Photoshoot() {
                           size="icon"
                           variant="secondary"
                           onClick={() => handleRetake(index)}
-                          disabled={photos.length < 8 || isCapturing}
+                          disabled={photos.length < 8 || isCapturing || selectedRetake !== null}
                         >
                           <Repeat className="h-4 w-4" />
                         </Button>
@@ -197,13 +197,13 @@ export default function Photoshoot() {
             <div className="mt-4 flex justify-end gap-2">
               <Button
                 onClick={() => setPhotos([])}
-                disabled={photos.length < 8 || isCapturing}
+                disabled={photos.length < 8 || isCapturing || selectedRetake !== null}
               >
                 Reset All
               </Button>
               <Button
                 onClick={goToSelection}
-                disabled={photos.length < 8 || isCapturing}
+                disabled={photos.length < 8 || isCapturing || selectedRetake !== null}
               >
                 <Check className="mr-2 h-4 w-4" />
                 Done
