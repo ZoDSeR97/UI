@@ -94,7 +94,7 @@ export default function Layout() {
     }
 
     return (
-        <div className="fixed inset-0 bg-cover bg-center flex flex-col px-1 py-6 mb-36">
+        <div className="fixed inset-0 bg-cover bg-center flex flex-col px-1 py-6 mb-48">
             {/* Header Section */}
             <div className="h-[15vh] flex items-center px-16">
                 <motion.div

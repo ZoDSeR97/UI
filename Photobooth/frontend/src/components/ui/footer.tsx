@@ -10,7 +10,7 @@ export default function Footer(): JSX.Element {
         <>
             {isNotHomepage
                 &&
-                <div className="h-[25vh] flex items-center justify-center mb-10">
+                <div className="h-[25vh] flex items-center justify-center">
                     <motion.div
                         className="text-pink-500 font-bold text-center"
                         initial={{ opacity: 0, scale: 0.5 }}

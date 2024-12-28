@@ -77,7 +77,7 @@ export default function Promo() {
     }
 
     return (
-        <div className="fixed inset-0 bg-pink-50 flex flex-col px-1 py-6 mb-36">
+        <div className="fixed inset-0 bg-pink-50 flex flex-col px-1 py-6 mb-48">
             {/* Header Section */}
             <div className="h-[15vh] flex items-center px-16">
                 <motion.div
@@ -96,9 +96,9 @@ export default function Promo() {
                 </motion.div>
             </div>
 
-            <div className="mx-auto mt-20 max-w-4xl">
+            <div className="mx-auto max-w-4xl">
                 <div className="grid gap-8 md:grid-cols-2">
-                    <div className="space-y-4 text-pink-500">
+                    <div className="text-pink-500">
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -120,7 +120,7 @@ export default function Promo() {
                             transition={{ delay: 0.2 }}
                         >
                             <img
-                                src="/src/assets/icon/GS25.png"
+                                src="/src/assets/icon/mascot.svg"
                                 alt="Promotional illustration"
                                 className="rounded-lg"
                             />
@@ -134,7 +134,7 @@ export default function Promo() {
                                     type="text"
                                     value={code}
                                     readOnly
-                                    className="text-center text-2xl tracking-wider text-pink-600"
+                                    className="text-center text-2xl tracking-wider text-pink-600 font-bold"
                                     maxLength={10}
                                 />
 

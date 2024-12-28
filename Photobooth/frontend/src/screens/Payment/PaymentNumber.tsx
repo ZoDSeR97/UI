@@ -20,13 +20,13 @@ export default function PaymentNumber() {
     const [hasCoupon, setHasCoupon] = useState(false)
 
     const calculatePrice = () => {
-        let basePrice = 70000, additionalPrice = 20000
+        let basePrice = 80000, additionalPrice = 20000
         if (import.meta.env.VITE_BOOTH_TYPE !== "REG") {
             basePrice = 100000
         }
 
         if (language === "mn" && import.meta.env.VITE_LOCATION == "MN") {
-            basePrice = basePrice / 10 + 1000*(basePrice<10000?1:0)
+            basePrice = basePrice / 10
             additionalPrice = (additionalPrice / 10) + 2000
         }
 
@@ -63,7 +63,7 @@ export default function PaymentNumber() {
     }
 
     return (
-        <div className="fixed inset-0 bg-pink-50 flex flex-col px-1 py-6 mb-36">
+        <div className="fixed inset-0 bg-pink-50 flex flex-col px-1 py-6 mb-48">
             {/* Back Button */}
             <div className="h-[15vh] flex items-center px-16">
                 <motion.div
@@ -85,7 +85,7 @@ export default function PaymentNumber() {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="max-w-xl mx-auto items-center justify-center py-40"
+                className="max-w-xl mx-auto items-center justify-center"
             >
                 <Card className="bg-white rounded-3xl shadow-lg w-full h-full">
                     <CardContent className="pt-6">

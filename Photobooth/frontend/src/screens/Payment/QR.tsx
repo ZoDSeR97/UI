@@ -75,7 +75,7 @@ export default function QR({ method }: QRPaymentProps) {
     const handleBack = async (): Promise<void> => {
         try {
             await playAudio('/src/assets/audio/click.wav')
-            navigate('/layout')
+            navigate('/payment')
         } catch (error) {
             console.error('Error handling back:', error)
         }

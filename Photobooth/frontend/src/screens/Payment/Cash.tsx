@@ -130,7 +130,7 @@ export default function Cash() {
   }
 
   return (
-    <div className="fixed inset-0 bg-pink-50 flex flex-col px-1 py-6 mb-36">
+    <div className="fixed inset-0 bg-pink-50 flex flex-col px-1 py-6 mb-44">
       {/* Header Section */}
       <div className="h-[15vh] flex items-center px-16">
         <motion.div
@@ -152,7 +152,7 @@ export default function Cash() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mx-auto max-w-md space-y-8 mt-40"
+        className="mx-auto max-w-md"
       >
         <div className="text-center text-pink-500">
           <h1 className="text-3xl font-bold">
@@ -216,7 +216,7 @@ export default function Cash() {
           transition={{ delay: 0.5 }}
         >
           <img
-            src="/src/assets/icon/GS25.png"
+            src="/src/assets/icon/mascot.svg"
             alt="Payment mascot"
             className="w-full h-full"
           />
