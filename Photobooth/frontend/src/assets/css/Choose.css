@@ -83,6 +83,10 @@
 .choose-photo-item-4cut-0-1.clicked,
 .choose-photo-item-4cut-1-0.clicked,
 .choose-photo-item-4cut-1-1.clicked,
+.choose-photo-item-4-1cut-0-0.clicked,
+.choose-photo-item-4-1cut-0-1.clicked,
+.choose-photo-item-4-1cut-1-0.clicked,
+.choose-photo-item-4-1cut-1-1.clicked,
 .choose-photo-item-3cut-0-0.clicked,
 .choose-photo-item-3cut-0-1.clicked,
 .choose-photo-item-2cut-0-0.clicked,
@@ -107,27 +111,27 @@
 }
 
 .choose-photo-item-4cut-0-0 {
-   width: 150px;
-   height: 110px;
-   background-size: cover;
-   background-repeat: no-repeat;
-   background-position: center;
-   margin: 1%;
-   position: absolute;
-   top: 31.8%;
-   left: 27.6%;
+    width: 150px;
+    height: 110px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 31.8%;
+    left: 27.6%;
 }
 
 .choose-photo-item-4cut-0-1 {
     width: 150px;
-   height: 110px;
-   background-size: cover;
-   background-repeat: no-repeat;
-   background-position: center;
-   margin: 1%;
-   position: absolute;
-   top: 31.8%;
-   left: 50%;
+    height: 110px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 31.8%;
+    left: 50%;
 }
 
 .choose-photo-item-4cut-1-0 {
@@ -144,18 +148,66 @@
 
 .choose-photo-item-4cut-1-1 {
     width: 150px;
-   height: 110px;
-   background-size: cover;
-   background-repeat: no-repeat;
-   background-position: center;
-   margin: 1%;
-   position: absolute;
-   top: 47.8%;
-   left: 50%;
+    height: 110px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 47.8%;
+    left: 50%;
+}
+
+/** Frame 4 cut vertical **/
+.choose-photo-item-4-1cut-0-0 {
+    width: 162px;
+    height: 217px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 14.1%;
+    left: 25.8%;
+}
+
+.choose-photo-item-4-1cut-0-1 {
+    width: 162px;
+    height: 217px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 14.1%;
+    left: 52.1%;
+}
+
+.choose-photo-item-4-1cut-1-0 {
+    width: 162px;
+    height: 217px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 45.3%;
+    left: 25.8%;
+}
+
+.choose-photo-item-4-1cut-1-1 {
+    width: 162px;
+    height: 217px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 45.3%;
+    left: 52.1%;
 }
 
 /** Frame 3cut **/
-
 .choose-photo-item-3cut-top-line {
     width: 450px;
     height: 255px;
@@ -221,14 +273,14 @@
 /** Frame 6 cut **/
 .choose-photo-item6-0-0 {
     width: 163.2px;
-   height: 162px;
-   background-size: cover;
-   background-repeat: no-repeat;
-   background-position: center;
-   margin: 1%;
-   position: absolute;
-   top: 7%;
-   left: 26.3%;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 7%;
+    left: 26.3%;
 }
 
 .choose-photo-item6-0-1 {
@@ -257,26 +309,26 @@
 
 .choose-photo-item6-1-1 {
     width: 163.2px;
-   height: 162px;
-   background-size: cover;
-   background-repeat: no-repeat;
-   background-position: center;
-   margin: 1%;
-   position: absolute;
-   top: 30%;
-   left: 51.3%;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 30%;
+    left: 51.3%;
 }
 
 .choose-photo-item6-2-0 {
     width: 163.2px;
-   height: 162px;
-   background-size: cover;
-   background-repeat: no-repeat;
-   background-position: center;
-   margin: 1%;
-   position: absolute;
-   top: 53%;
-   left: 26.3%;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 53%;
+    left: 26.3%;
 }
 
 .choose-photo-item6-2-1 {

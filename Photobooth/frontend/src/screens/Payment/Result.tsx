@@ -47,7 +47,7 @@ export default function Result() {
   }
 
   return (
-    <div className="fixed inset-0 bg-pink-50 flex flex-col px-1 py-6 mb-36 items-center justify-center">
+    <div className="fixed inset-0 bg-pink-50 flex flex-col px-1 py-6 mb-48 items-center justify-center">
       {confettiActive && <Confetti />}
       <Card className="w-full max-w-2xl bg-white/80 backdrop-blur-sm shadow-xl">
         <motion.div
