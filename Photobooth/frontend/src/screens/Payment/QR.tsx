@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useTranslation } from 'react-i18next'
+import { playAudio } from '@/lib/utils'
 
 interface QRPaymentProps {
     method: string
@@ -25,15 +26,6 @@ export default function QR({ method }: QRPaymentProps) {
     const deviceNumber = import.meta.env.VITE_REACT_APP_DEVICE_NUMBER || "001"
     const amount = sessionStorage.getItem('sales') || "0"
     const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND || "https://api.example_of_screw_up.com"
-
-    const playAudio = async (audioPath: string): Promise<void> => {
-        try {
-            const audio = new Audio(audioPath)
-            await audio.play()
-        } catch (error) {
-            console.error('Error playing audio:', error)
-        }
-    }
 
     useEffect(() => {
         const fetchQRPayment = async () => {

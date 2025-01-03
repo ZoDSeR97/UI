@@ -7,9 +7,12 @@ export default function Footer(): JSX.Element {
     // Check if the current path is NOT the homepage ('/')
     const isNotHomepage = location.pathname !== "/";
     const isNotPhotoShoot = location.pathname !== "/photo";
+    const isNotChoosing = location.pathname !== "/photo-choose";
+    const isNotFilter = location.pathname !== "/filter";
+    const isNotSticker = location.pathname !== "/sticker";
     return(
         <>
-            {isNotHomepage && isNotPhotoShoot
+            {isNotHomepage && isNotPhotoShoot && isNotChoosing && isNotFilter
                 &&
                 <div className="h-[25vh] flex items-center justify-center">
                     <motion.div

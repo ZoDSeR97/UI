@@ -12,9 +12,9 @@ import Promo from './screens/Payment/Promo';
 import Cash from './screens/Payment/Cash';
 import Result from './screens/Payment/Result';
 import Photoshoot from './screens/Photoshoot/Photo';
-/* import Choose from './screens/Photo/Choose';
-import Filter from './screens/Filter';
-import Sticker from './screens/Sticker';
+import Choose from './screens/Photoshoot/Choose';
+import Filter from './screens/Makeup/Filter';
+/* import Sticker from './screens/Sticker';
 import Print from './screens/Print';
 import Landing from './screens/Landing'; */
 
@@ -35,9 +35,9 @@ function App() {
       <Route path="/payment-cash" element={<Cash />} />
       <Route path="/payment-result" element={<Result />} />
       <Route path="/photo" element={<Photoshoot />} />
-      {/* <Route path="/photo-choose" element={<Choose />} />
+      <Route path="/photo-choose" element={<Choose />} />
       <Route path="/filter" element={<Filter />} />
-      <Route path="/sticker" element={<Sticker />} />
+      {/* <Route path="/sticker" element={<Sticker />} />
       <Route path="/print" element={<Print />} />
       <Route path="/landing" element={<Landing />} /> */}
 

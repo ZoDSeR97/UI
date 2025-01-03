@@ -16,10 +16,15 @@ import { v4 as uuidv4 } from 'uuid';
 
 type Language = 'en' | 'ko' | 'vi' | 'mn'
 
+interface Photo {
+  id: number
+  url: string
+}
+
 export default function Photoshoot() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [photos, setPhotos] = useState<string[]>([]);
+  const [photos, setPhotos] = useState<Photo[]>([]);
   const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en');
   const [countdown, setCountdown] = useState(5);
   const [isCapturing, setIsCapturing] = useState(false);
@@ -109,16 +114,12 @@ export default function Photoshoot() {
   }, [photos, startCapture])
 
   const goToSelection = async () => {
-    if (photos.length > 0 && photos.length === 8) {
       sessionStorage.setItem("uuid", uuid);
 
       sessionStorage.setItem('photos', JSON.stringify(photos));
 
-      sessionStorage.setItem('choosePhotos', JSON.stringify(photos.map(photo => photo.id)));
-
       await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/stop_live_view`)
       navigate("/photo-choose");
-    }
   };
 
   return (

@@ -11,8 +11,7 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Button } from "@/components/ui/button"
-import { cn } from '@/lib/utils'
-import { playAudio } from "@/lib/utils"
+import { cn, playAudio } from '@/lib/utils'
 
 type Language = 'en' | 'ko' | 'vi' | 'mn'
 
