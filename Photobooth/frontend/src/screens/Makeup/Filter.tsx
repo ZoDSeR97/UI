@@ -190,21 +190,21 @@ export default function FilterPage() {
                                                     <div
                                                         key={index}
                                                         className={`relative aspect-auto ${selectedFrame === "Stripx2"
-                                                            ? `max-h-[182px] max-w-[312px] ${index % 2 === 0 ? "left-3" : "right-3"}`
+                                                            ? `max-h-[182px] max-w-[312px] ${index % 2 === 0 ? "left-2" : "right-4"}`
                                                             : selectedFrame === "6-cutx2"
                                                                 ? `max-h-[182px] max-w-[312px] ${index % 2 === 0 ? "left-3" : "right-3"}`
                                                                 : selectedFrame === "4-cutx2" || selectedFrame === "4.1-cutx2"
                                                                     ? `max-h-[182px] max-w-[312px] ${index % 2 === 0 ? "left-3" : "right-3"}`
                                                                     : selectedFrame === "2cut-x2"
                                                                         ? `max-h-[182px] max-w-[312px] ${index % 2 === 0 ? "left-3" : "right-3"}`
-                                                                        : `max-h-[182px] max-w-[312px] ${index % 2 === 0 ? "left-3" : "right-3"}`
+                                                                        : `max-h-[182px] max-w-[312px] ${index % 2 === 0 ? "left-2" : "right-4"}`
                                                             } overflow-hidden rounded-lg`}
                                                     >
                                                         <img
                                                             src={photos[i].url}
                                                             alt="Selected photo"
                                                             className="h-full w-full object-cover"
-                                                            style={{filter:filterStyle}}
+                                                            style={{filter:filterStyle, transform: "scaleX(-1)"}}
                                                         />
                                                     </div>
                                                 ))}

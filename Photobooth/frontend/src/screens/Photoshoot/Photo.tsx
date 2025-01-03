@@ -130,6 +130,7 @@ export default function Photoshoot() {
           src={`${import.meta.env.VITE_REACT_APP_API}/api/video_feed`}
           alt="Live View"
           className='h-full w-full object-cover'
+          style={{transform: "scaleX(-1)"}}
         />
         <canvas ref={canvasRef} className="hidden" />
 
@@ -180,7 +181,8 @@ export default function Photoshoot() {
                         <img 
                           src={photos[index].url} 
                           alt={`Photo ${index + 1}`} 
-                          className="h-full w-full object-cover" 
+                          className="h-full w-full object-cover"
+                          style={{transform: "scaleX(-1)"}}
                         />
                         <div className="absolute inset-0 hidden items-center justify-center group-hover:flex">
                           <Button 
