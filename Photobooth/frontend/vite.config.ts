@@ -152,31 +152,41 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: [
+          // Core React bundle
+          'react-vendor': [
             'react',
             'react-dom',
-            'react-router-dom',
+            'react-router-dom'
+          ],
+          // UI utilities bundle
+          'ui-utils': [
             'clsx',
             'tailwind-merge',
             'class-variance-authority',
-            'lucide-react',
+            'lucide-react'
+          ],
+          // Radix UI components bundle
+          'radix': [
             '@radix-ui/react-checkbox',
             '@radix-ui/react-dropdown-menu',
             '@radix-ui/react-label',
             '@radix-ui/react-progress',
             '@radix-ui/react-slider',
             '@radix-ui/react-slot',
-            '@radix-ui/react-tabs',
-            'framer-motion', 
-            'react-confetti',
-            'i18next-http-backend', 
-            'react-i18next',
-            './src/components/**',
-            './src/pages/**',
-            './src/hooks/**'
+            '@radix-ui/react-tabs'
           ],
-          ...manualChunksFunction
-        },
+          // Animations and effects
+          'animations': [
+            'framer-motion',
+            'react-confetti'
+          ],
+          // i18n bundle
+          'i18n': [
+            'i18next-http-backend',
+            'react-i18next'
+          ]
+        }, 
+        ...manualChunksFunction,
         chunkFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash][extname]'
       }
