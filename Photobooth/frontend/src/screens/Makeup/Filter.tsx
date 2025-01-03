@@ -1,13 +1,13 @@
-import { useState, useEffect, useRef } from "react"
-import { motion } from "framer-motion"
-import { ChevronLeft, Heart, ImageIcon, Moon, Sparkles, Sun } from 'lucide-react'
-import { cn, playAudio } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Slider } from "@/components/ui/slider"
-import { useNavigate } from "react-router-dom"
-import { useTranslation } from "react-i18next"
-import { toBlob } from 'html-to-image'
+import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { ChevronLeft, Heart, ImageIcon, Moon, Sparkles, Sun } from 'lucide-react';
+import { cn, playAudio } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { toBlob } from 'html-to-image';
 
 interface Photo {
     id: number
@@ -248,7 +248,7 @@ export default function FilterPage() {
                                                 setIntensity([50])
                                             }}
                                             className={cn(
-                                                "flex flex-col items-center rounded-lg border-2 p-4 transition-colors",
+                                                "flex flex-col items-center rounded-full border-2 p-4 transition-colors",
                                                 selectedFilter === filter.id
                                                     ? "border-pink-500 bg-pink-50"
                                                     : "border-transparent hover:border-pink-200"
