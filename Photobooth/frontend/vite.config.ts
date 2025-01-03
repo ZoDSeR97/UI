@@ -7,10 +7,37 @@ import viteImagemin from 'vite-plugin-imagemin'
 import tailwindcss from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
 import path from "path"
+import viteEslint from 'vite-plugin-eslint'
+import inspect from 'vite-plugin-inspect'
+import { esbuildCommonjs } from '@originjs/vite-plugin-commonjs'
 
-export default defineConfig({
+// Separate chunks function for better organization
+const manualChunksFunction = (id) => {
+  if (id.includes('node_modules')) {
+    if (id.includes('react')) return 'react-vendor'
+    if (id.includes('@emotion')) return 'emotion-vendor'
+    return 'vendor'
+  }
+  if (id.includes('src/components')) return 'components'
+  if (id.includes('src/pages')) return 'pages'
+  if (id.includes('src/hooks')) return 'hooks'
+}
+
+export default defineConfig(({ mode }) => ({
   plugins: [
-    react(),
+    react({
+      plugins: [
+        ['@swc/plugin-emotion', {}]
+      ],
+      fastRefresh: true,
+      devTarget: 'esnext'
+    }),
+    mode === 'development' && inspect(), // Debugging plugin
+    mode === 'development' && viteEslint({
+      failOnError: false,
+      include: ['src/**/*.ts', 'src/**/*.tsx'],
+      cache: true
+    }),
     // Visualization plugin to analyze bundle size
     visualizer({
       filename: './bundle-visualizer.html',
@@ -76,36 +103,53 @@ export default defineConfig({
         }
       ],
     }),
-  ],
+  ].filter(Boolean),
 
   // Dependency optimization
   optimizeDeps: {
-    include: ['react', 'react-dom'],
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom', // Common dependencies
+      '@emotion/react',
+      '@emotion/styled'
+    ],
     exclude: ['js-big-decimal'],
+    esbuildOptions: {
+      plugins: [esbuildCommonjs(['some-cjs-pkg'])],
+      target: 'esnext'
+    }
   },
 
   // Build settings
   build: {
     target: 'esnext',
     minify: 'terser',
-    terserOptions: {
-      compress: {
-        passes: 2,
-        drop_console: true,
-        drop_debugger: true
-      }
+    cache: true,
+    sourcemap: mode === 'development',
+    reportCompressedSize: false,
+    esbuildOptions: {
+      // esbuild minify options
+      legalComments: 'none',
+      treeShaking: true,
+      drop: mode === 'production' ? ['console', 'debugger'] : [],
+      minifyIdentifiers: true,
+      minifySyntax: true,
+      minifyWhitespace: true,
+      target: 'esnext'
     },
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          if (id.includes('node_modules')) {
-            return 'vendor'
-          }
-          if (id.includes('src/components')) {
-            return 'components'
-          }
+        manualChunks: {
+          vendor: [
+            'react',
+            'react-dom',
+            'react-router-dom'
+          ],
+          ...manualChunksFunction
         },
-        chunkFileNames: 'assets/[name]-[hash].js'
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash][extname]'
       }
     },
     chunkSizeWarningLimit: 500 // in kB
@@ -125,8 +169,17 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://172.30.174.2:5000',
-        changeOrigin: true
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '')
       }
+    },
+    hmr: {
+      overlay: true
+    },
+    watch: {
+      usePolling: true,
+      interval: 100
     }
   },
 
@@ -149,4 +202,4 @@ export default defineConfig({
       reporter: ['text', 'json', 'html']
     }
   }
-})
+}))
