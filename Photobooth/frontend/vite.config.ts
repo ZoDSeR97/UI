@@ -7,8 +7,6 @@ import viteImagemin from 'vite-plugin-imagemin'
 import tailwindcss from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
 import path from "path"
-import viteEslint from 'vite-plugin-eslint'
-import inspect from 'vite-plugin-inspect'
 import { esbuildCommonjs } from '@originjs/vite-plugin-commonjs'
 
 // Separate chunks function for better organization
@@ -26,17 +24,8 @@ const manualChunksFunction = (id) => {
 export default defineConfig(({ mode }) => ({
   plugins: [
     react({
-      plugins: [
-        ['@swc/plugin-emotion', {}]
-      ],
       fastRefresh: true,
       devTarget: 'esnext'
-    }),
-    mode === 'development' && inspect(), // Debugging plugin
-    mode === 'development' && viteEslint({
-      failOnError: false,
-      include: ['src/**/*.ts', 'src/**/*.tsx'],
-      cache: true
     }),
     // Visualization plugin to analyze bundle size
     visualizer({
@@ -110,13 +99,35 @@ export default defineConfig(({ mode }) => ({
     include: [
       'react',
       'react-dom',
-      'react-router-dom', // Common dependencies
-      '@emotion/react',
-      '@emotion/styled'
+      'react-router-dom',
+      'lucide-react',
+      'clsx',
+      'tailwind-merge',
+      'class-variance-authority'
     ],
-    exclude: ['js-big-decimal'],
+    exclude: [
+      '@radix-ui/react-checkbox',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-label',
+      '@radix-ui/react-progress',
+      '@radix-ui/react-slider',
+      '@radix-ui/react-slot',
+      '@radix-ui/react-tabs',
+      'framer-motion',
+      'html-to-image',
+      'qrcode.react',
+      'uuid',
+      'i18next-http-backend',
+      'embla-carousel-react'
+    ],
     esbuildOptions: {
-      plugins: [esbuildCommonjs(['some-cjs-pkg'])],
+      plugins: [esbuildCommonjs([
+        'void-elements',
+        'i18next-http-backend',
+        'qrcode.react',
+        'html-to-image',
+        'react-confetti'
+      ])],
       target: 'esnext'
     }
   },
@@ -144,7 +155,25 @@ export default defineConfig(({ mode }) => ({
           vendor: [
             'react',
             'react-dom',
-            'react-router-dom'
+            'react-router-dom',
+            'clsx',
+            'tailwind-merge',
+            'class-variance-authority',
+            'lucide-react',
+            '@radix-ui/react-checkbox',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-label',
+            '@radix-ui/react-progress',
+            '@radix-ui/react-slider',
+            '@radix-ui/react-slot',
+            '@radix-ui/react-tabs',
+            'framer-motion', 
+            'react-confetti',
+            'i18next-http-backend', 
+            'react-i18next',
+            './src/components/**',
+            './src/pages/**',
+            './src/hooks/**'
           ],
           ...manualChunksFunction
         },
@@ -185,13 +214,14 @@ export default defineConfig(({ mode }) => ({
 
   // TypeScript configuration
   resolve: {
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],  // Added more extensions
     alias: {
       "@": path.resolve(__dirname, "./src"),
       "@components": path.resolve(__dirname, "./src/components"),
       "@utils": path.resolve(__dirname, "./src/utils")
     },
   },
+
   // Test configuration
   test: {
     environment: 'jsdom',
