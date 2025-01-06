@@ -12,7 +12,7 @@ export default function Footer(): JSX.Element {
     const isNotSticker = location.pathname !== "/sticker";
     return(
         <>
-            {isNotHomepage && isNotPhotoShoot && isNotChoosing && isNotFilter
+            {isNotHomepage && isNotPhotoShoot && isNotChoosing && isNotFilter && isNotSticker
                 &&
                 <div className="h-[25vh] flex items-center justify-center">
                     <motion.div

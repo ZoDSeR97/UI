@@ -22,6 +22,7 @@ export default function QR({ method }: QRPaymentProps) {
     const [orderCode, setOrderCode] = useState<string | null>(null)
     const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en')
     const [paymentStatus, setPaymentStatus] = useState<string | null>(null)
+    const [invoice, setInvoice] = useState(null);
 
     const deviceNumber = import.meta.env.VITE_REACT_APP_DEVICE_NUMBER || "001"
     const amount = sessionStorage.getItem('sales') || "0"
@@ -34,6 +35,10 @@ export default function QR({ method }: QRPaymentProps) {
                 const data = await response.json()
                 setQrCode(data.qr_code)
                 setOrderCode(data.order_code)
+                if (method === "qpay") {
+                    setInvoice(data.invoice_id)
+                }
+
                 if (data.return_code === 1) {
                     setPaymentStatus(data.status)
                 }
@@ -50,19 +55,41 @@ export default function QR({ method }: QRPaymentProps) {
 
         const checkPaymentStatus = async () => {
             try {
-                const response = await fetch(`${backendUrl}/${method}/api/webhook?order=${orderCode}`)
-                const data = await response.json()
-                if (data.status === "Success") {
-                    setPaymentStatus("Success")
+                if (method === "qpay") {
+                    const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND}/${method}/api`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                "invoice_id": invoice,
+                                "order_code": orderCode,
+                            })
+                        });
+                    const paymentData = await response.json();
+                    sessionStorage.setItem('orderCodeNum', paymentData.order_code);
+                    if (paymentData.status === "Success") {
+                        clearInterval(interval);
+                        navigate("/payment-result");
+                    }
+                } else {
+                    const response = await fetch(`${backendUrl}/${method}/api/webhook?order=${orderCode}`)
+                    const data = await response.json()
+                    sessionStorage.setItem('orderCodeNum', data.order_code);
+                    if (data.status === "Success") {
+                        clearInterval(interval);
+                        navigate("/payment-result");
+                    }
                 }
             } catch (error) {
                 console.error(error)
             }
         }
 
-        const interval = setInterval(checkPaymentStatus, 8000)
+        const interval = setInterval(checkPaymentStatus, 2000)
         return () => clearInterval(interval)
-    }, [orderCode, method, backendUrl])
+    }, [orderCode, method, backendUrl, navigate, invoice])
 
     const handleBack = async (): Promise<void> => {
         try {

@@ -24,25 +24,39 @@ export default function Cash() {
 
   // Check payment status continuously
   useEffect(() => {
-    let intervalId: NodeJS.Timeout
+    //NodeJS.Timeout
+    const intervalId = setInterval(() => {
+      const ooCode = sessionStorage.getItem('orderCodeNum');
+      if (ooCode && insertedMoney < amountToPay) {
+        checkPaymentStatus(ooCode);
+      } else if (insertedMoney >= amountToPay) {
+        // Stop the interval when payment is complete
+        clearInterval(intervalId);
+      }
+    }, 500);
+    return () => clearInterval(intervalId);
+  }, [amountToPay, insertedMoney, checkPaymentStatus]);
 
-    if (orderCode && insertedMoney < amountToPay) {
-      intervalId = setInterval(() => {
-        checkPaymentStatus(orderCode)
-      }, 1000)
+  const handlePaymentCompletion = useCallBack(async () => {
+    setIsProcessing(true)
+    try {
+      await Promise.all([
+        fetch(`${import.meta.env.VITE_REACT_APP_API}/api/cash/reset`, { method: "POST" }),
+        fetch(`${import.meta.env.VITE_REACT_APP_BACKEND}/payments/api/cash/webhook?order=${orderCode}`)
+      ])
+      navigate("/payment-result")
+    } catch (error) {
+      console.error("Payment completion failed:", error)
+      setIsProcessing(false)
     }
-
-    return () => {
-      if (intervalId) clearInterval(intervalId)
-    }
-  }, [orderCode, insertedMoney, amountToPay])
+  });
 
   // Auto - transition when inserted amount is sufficient
   useEffect(() => {
     if (insertedMoney >= amountToPay) {
       handlePaymentCompletion()
     }
-  }, [insertedMoney, amountToPay])
+  }, [insertedMoney, amountToPay, handlePaymentCompletion])
 
 
   // Initialize payment
@@ -54,10 +68,17 @@ export default function Cash() {
     try {
       const amountToPay = sessionStorage.getItem('sales');
       const deviceNumber = import.meta.env.VITE_REACT_APP_DEVICE_NUMBER;
-      
-      await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND}/payments/api/cash/create?device=${deviceNumber}&amount=${amountToPay}`)
-        .then((response) => response.json())
-        .then((data) => setOrderCode(data.orderCode))
+
+      if (sessionStorage.getItem('orderCodeNum')){
+        setOrderCode(sessionStorage.getItem('orderCodeNum'));
+      } else {
+        await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND}/payments/api/cash/create?device=${deviceNumber}&amount=${amountToPay}`)
+          .then((response) => response.json())
+          .then((data) => {
+            sessionStorage.setItem('orderCodeNum', data.order_code);
+            setOrderCode(data.order_code)
+          })
+      }
 
       await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/cash/start`, {
         method: "POST",
@@ -72,24 +93,10 @@ export default function Cash() {
   async function checkPaymentStatus(code: string) {
     try {
       await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/cash/status`)
-      .then((response) => response.json())
+        .then((response) => response.json())
         .then((data) => setInsertedMoney(data.totalMoney))
     } catch (error) {
       console.error("Failed to check status:", error)
-    }
-  }
-
-  const handlePaymentCompletion = async () => {
-    setIsProcessing(true)
-    try {
-      await Promise.all([
-        fetch("/api/cash/stop", { method: "POST" }),
-        fetch(`/api/cash/webhook?order=${orderCode}`)
-      ])
-      navigate("/payment-result")
-    } catch (error) {
-      console.error("Payment completion failed:", error)
-      setIsProcessing(false)
     }
   }
 
@@ -159,7 +166,7 @@ export default function Cash() {
             {translations.title[language]}
           </h1>
           <p className="mt-2">
-            Please insert the exact cash you would like to pay.<br/>
+            Please insert the exact cash you would like to pay.<br />
             This machine does not return funds.
           </p>
         </div>
@@ -224,4 +231,8 @@ export default function Cash() {
       </motion.div>
     </div>
   )
+}
+
+function useCallBack(arg0: () => Promise<void>) {
+  throw new Error("Function not implemented.")
 }

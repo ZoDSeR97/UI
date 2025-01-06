@@ -20,17 +20,20 @@ export default function Promo() {
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const handleNumberClick = (num: number) => {
+        playAudio('/src/assets/audio/click.wav')
         if (code.length < 10) {
             setCode(prev => prev + num)
         }
     }
 
     const handleBackspace = () => {
+        playAudio('/src/assets/audio/click.wav')
         setCode(prev => prev.slice(0, -1))
     }
 
     const handleSubmit = async () => {
         try {
+            await playAudio('/src/assets/audio/click.wav')
             setIsSubmitting(true)
             const deviceNumber = import.meta.env.VITE_REACT_APP_DEVICE_NUMBER;
             const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND}/payments/api/redeem?device=${deviceNumber}&code=${code}&amount=${frameAmount}`);

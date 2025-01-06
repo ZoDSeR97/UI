@@ -135,7 +135,7 @@ export default defineConfig(({ mode }) => ({
   // Build settings
   build: {
     target: 'esnext',
-    minify: 'terser',
+    minify: 'esbuild',
     cache: true,
     sourcemap: mode === 'development',
     reportCompressedSize: false,

@@ -129,8 +129,7 @@ export default function Photoshoot() {
         <img
           src={`${import.meta.env.VITE_REACT_APP_API}/api/video_feed`}
           alt="Live View"
-          className='h-full w-full object-cover'
-          style={{transform: "scaleX(-1)"}}
+          className='h-full w-full object-cover transform-gpu -scale-x-100'
         />
         <canvas ref={canvasRef} className="hidden" />
 
@@ -167,22 +166,21 @@ export default function Photoshoot() {
         <div className="py-4 bg-pink-50">
           <Carousel 
             opts={{
-              align: "center",
+              align: "start",
               loop: true,
             }}
             className="w-full bg-pink-50">
             <CarouselContent className="justify-center items-center">
               {Array.from({ length: 8 }).map((_, index) => (
-                <CarouselItem key={index} className="basis-1/6">
-                  <div className={cn("group relative aspect-auto overflow-hidden rounded-lg border bg-muted w-[220px]",
+                <CarouselItem key={index} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/6 pl-4">
+                  <div className={cn("group relative aspect-auto overflow-hidden rounded-lg border bg-muted w-[220px] mx-auto",
                     selectedRetake === index && "ring-2 ring-primary ring-offset-2")}>
                     {photos[index] ? (
                       <>
                         <img 
                           src={photos[index].url} 
                           alt={`Photo ${index + 1}`} 
-                          className="h-full w-full object-cover"
-                          style={{transform: "scaleX(-1)"}}
+                          className="h-full w-full object-cover transform-gpu -scale-x-100"
                         />
                         <div className="absolute inset-0 hidden items-center justify-center group-hover:flex">
                           <Button 
@@ -191,7 +189,7 @@ export default function Photoshoot() {
                             onClick={() => handleRetake(index)}
                             disabled={photos.length < 8 || isCapturing || selectedRetake !== null}
                           >
-                            <Repeat className="h-4 w-4" />
+                            <Repeat className="h-4 w-4 " />
                           </Button>
                         </div>
                       </>
@@ -214,14 +212,17 @@ export default function Photoshoot() {
         <Button 
           onClick={() => setPhotos([])}
           disabled={photos.length < 8 || isCapturing || selectedRetake !== null}
+          className='bg-pink-500 hover:bg-pink-600 rounded-full text-white'
         >
           <Trash2 className="mr-2 h-4 w-4" />
           Reset All
         </Button>
         <Button 
           onClick={goToSelection}
-          disabled={photos.length < 8 || isCapturing || selectedRetake !== null}>
-          <Check className="mr-2 h-4 w-4" />
+          disabled={photos.length < 8 || isCapturing || selectedRetake !== null}
+          className='bg-pink-500 hover:bg-pink-600 rounded-full text-white'
+        >
+          <Check className="mr-2 h-4 w-4 " />
           Continue
         </Button>
       </div>
