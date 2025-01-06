@@ -47,7 +47,7 @@ export default function Photoshoot() {
     playAudio("/src/assets/audio/look_up_smile.wav");
   }, []);
 
-  const capturePhoto = useCallback(async () => {
+  const capturePhoto = async () => {
     await sleep(100);
     setIsCapturing(true);
     await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/capture`,
@@ -75,26 +75,27 @@ export default function Photoshoot() {
         })
         setSelectedRetake(null)
       } else {
-        // Add new photo
-        setPhotos(prev => [...prev, latestImage])
+        if (photos.length < 8)
+          // Add new photo
+          setPhotos(prev => [...prev, latestImage])
       }
       setIsCapturing(false)
     } else {
       navigate(-1)
     }
-  }, [selectedRetake, uuid]);
+  };
 
   // Countdown and photo capture logic
   useEffect(() => {
     if (uuid && countdown > 0) {
       if (countdown == 5)
         playAudio("/src/assets/audio/count.wav");
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
+      const timer = setTimeout(() => setCountdown(prev => prev - 1), 1000)
       return () => clearTimeout(timer)
     } else if (countdown === 0) {
       capturePhoto()
     }
-  }, [capturePhoto, countdown, uuid])
+  }, [countdown, uuid])
 
   const handleRetake = (index: number) => {
     setSelectedRetake(index)
@@ -172,7 +173,7 @@ export default function Photoshoot() {
             className="w-full bg-pink-50">
             <CarouselContent className="justify-center items-center">
               {Array.from({ length: 8 }).map((_, index) => (
-                <CarouselItem key={index} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/6 pl-4">
+                <CarouselItem key={index} className="basis-1/6 pl-4">
                   <div className={cn("group relative aspect-auto overflow-hidden rounded-lg border bg-muted w-[220px] mx-auto",
                     selectedRetake === index && "ring-2 ring-primary ring-offset-2")}>
                     {photos[index] ? (
@@ -194,7 +195,7 @@ export default function Photoshoot() {
                         </div>
                       </>
                     ) : (
-                      <div className="flex h-full items-center justify-center">
+                      <div className="flex h-[163px] items-center justify-center">
                         <Camera className="h-6 w-6 text-muted-foreground" />
                       </div>
                     )}
