@@ -12,30 +12,21 @@
     "settings": "Settings"
   },
   "filter": {
-    "title": "Filter",
-    "reset": "Reset",
-    "apply": "Apply",
-    "intensity": "INTENSITY",
-    "by": "By",
-    "confirm": "CONFIRM",
-    "noFilter": "NO FILTER"
-  },
-  "menu": {
-    "goBack": "Go back",
-    "filter": "Filter",
-    "frame": "Frame",
-    "payment": "Payment",
-    "photography": "Photography",
-    "printing": "Printing",
-    "photomong": "Photomong"
-  },
-  "brightness": "Brightness",
-  "items": {
     "personality": "Personality",
     "natural": "Natural Look",
     "perfect": "Perfect Pink",
     "classic": "Classic",
     "bnw": "B&W",
     "skin": "Skin Smooth"
-  }
+  },
+  "menu": {
+    "start": "START",
+    "goBack": "GO BACK",
+    "frame": "FRAME",
+    "payment": "PAYMENT",
+    "printing": "PRINTING",
+    "continue": "CONTINUE",
+    "confirm": "CONFIRM"
+  },
+  "brightness": "Brightness"
 }

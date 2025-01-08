@@ -12,30 +12,21 @@
       "settings": "Cài đặt"
     },
     "filter": {
-      "title": "Bộ lọc",
-      "reset": "Reset",
-      "apply": "Cập nhật",
-      "intensity": "Độ mạnh",
-      "by": "Bộ lọc theo",
-      "confirm": "Xác nhận",
-      "noFilter": "Không có bộ lọc nào"
-    },
-    "menu": {
-      "goBack": "Quay lại",
-      "filter": "Bộ lọc",
-      "frame": "Khung ảnh",
-      "payment": "Thanh toán",
-      "photography": "Chụp ảnh",
-      "printing": "In ảnh",
-      "photomong": "Photomong"
-    },
-    "brightness": "Độ sáng",
-    "items": {
-      "personality": "Cá nhân",
+      "personality": "Cá tính",
       "natural": "Tự nhiên",
       "perfect": "Hoàn hảo",
       "classic": "Cổ điển",
       "bnw": "Trắng đen",
       "skin": "Da"
-    }
+    },
+    "menu": {
+      "start": "BẮT ĐẦU",
+      "goBack": "QUAY LẠI",
+      "frame": "KHUNG ẢNH",
+      "payment": "THANH TOÁN",
+      "printing": "IN ẢNH",
+      "continue": "TIẾP TỤC",
+      "confirm": "Xác nhận"
+    },
+    "brightness": "Độ sáng"
   }

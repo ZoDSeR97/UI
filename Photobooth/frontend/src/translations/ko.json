@@ -12,30 +12,21 @@
     "settings": "설정"
   },
   "filter": {
-    "title": "필터",
-    "reset": "초기화",
-    "apply": "적용",
-    "intensity": "강도",
-    "by": "필터 제작자",
-    "confirm": "확인",
-    "noFilter": "필터 없음"
-  },
-  "menu": {
-    "goBack": "뒤로 가기",
-    "filter": "필터",
-    "frame": "프레임",
-    "payment": "결제",
-    "photography": "사진",
-    "printing": "인쇄 중",
-    "photomong": "포토몽"
-  },
-  "brightness": "밝기",
-  "items": {
     "personality": "개성",
     "natural": "자연스러운 룩",
     "perfect": "완벽한 핑크",
     "classic": "클래식",
     "bnw": "흑백",
     "skin": "피부 부드럽게"
-  }
+  },
+  "menu": {
+    "start": "시작",
+    "goBack": "뒤로 가기",
+    "frame": "프레임",
+    "payment": "결제",
+    "printing": "인쇄 중",
+    "continue": "계속하다",
+    "confirm": "확인"
+  },
+  "brightness": "밝기"
 }

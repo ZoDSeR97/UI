@@ -3,7 +3,7 @@ import './index.css'
 import App from './App.tsx'
 import i18n from '/src/translations/i18n';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter, useLocation } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import Footer from './components/ui/footer.tsx'
 
 createRoot(document.getElementById('root')!).render(

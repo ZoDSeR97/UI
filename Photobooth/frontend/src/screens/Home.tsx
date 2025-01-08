@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import i18n from '/src/translations/i18n';
@@ -46,7 +46,7 @@ function Home() {
             >
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="bg-pink-100 text-pink-500 border-pink-200">
+                        <Button variant="outline" className="bg-pink-100 text-pink-500 border-pink-200 rounded-full hover:bg-pink-300 hover:text-pink-600">
                             <Globe className="mr-2 h-4 w-4" />
                             {t(`language.${language}`)}
                             <ChevronDown className="ml-2 h-4 w-4" />
