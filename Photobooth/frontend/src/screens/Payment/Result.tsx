@@ -62,7 +62,7 @@ export default function Result() {
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 150 }}
           >
-            {translations[language].success}
+            {t('text.result')}
           </motion.h1>
 
           <motion.div
@@ -121,7 +121,7 @@ export default function Result() {
               onClick={handleContinue}
               className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-6 text-xl rounded-full font-bold tracking-wide transform transition-all duration-200 hover:scale-105 active:scale-95"
             >
-              {translations[language].continue}
+              {t('menu.continue')}
             </Button>
           </motion.div>
         </motion.div>

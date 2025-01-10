@@ -15,17 +15,17 @@ type Language = 'en' | 'ko' | 'vi' | 'mn'
 export default function PrintPage() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-      const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en');
+    const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en');
     const [confettiActive, setConfettiActive] = useState(true);
 
     useEffect(() => {
         // Play success sound
         playAudio("/src/assets/audio/thank_being.wav")
-    
+
         // Disable confetti after 5 seconds
         const timer = setTimeout(() => setConfettiActive(false), 5000)
         return () => clearTimeout(timer)
-      }, [])
+    }, [])
 
     useEffect(() => {
         playAudio("/src/assets/audio/thank_being.wav")
@@ -82,7 +82,7 @@ export default function PrintPage() {
                         animate={{ scale: 1 }}
                         transition={{ delay: 0.2, type: "spring", stiffness: 150 }}
                     >
-                        {"Thank you!"}
+                        {t('text.print')}
                     </motion.h1>
 
                     <motion.div
@@ -143,15 +143,12 @@ export default function PrintPage() {
                         >
                             <div className="absolute bottom-0 right-0">
                                 <QRCodeComponent />
+                                {/* <GifQRCodeComponent /> */}
                             </div>
                         </Button>
                     </motion.div>
                 </motion.div>
             </Card>
-
-            {/* <div className="gif-qr-code-container">
-                    <GifQRCodeComponent />
-               </div> */}
         </div>
     );
 }

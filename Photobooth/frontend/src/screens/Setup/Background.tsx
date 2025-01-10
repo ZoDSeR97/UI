@@ -81,8 +81,8 @@ export default function Background() {
         return (
             <div className="flex items-center justify-center h-screen">
                 <div className="text-red-500 text-center">
-                    <p>{t('Technical issue in loading backgrounds')}: {error}</p>
-                    <Button onClick={fetchBackgrounds} className="mt-4">{t('Retry')}</Button>
+                    <p>{t('text.background')}: {error}</p>
+                    <Button onClick={fetchBackgrounds} className="mt-4">{t('menu.retry')}</Button>
                 </div>
             </div>
         )
@@ -103,7 +103,7 @@ export default function Background() {
                         onClick={handleBack}
                     >
                         <ChevronLeft className="w-5 h-5" />
-                        <span>{t('Back')}</span>
+                        <span>{t('menu.back')}</span>
                     </Button>
                 </motion.div>
             </div>

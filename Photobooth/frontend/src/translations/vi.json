@@ -1,32 +1,65 @@
 {
-    "language": {
-      "en": "Tiếng Anh",
-      "ko": "Tiếng Hàn",
-      "vi": "Tiếng Việt",
-      "mn":"Tiếng Mông Cổ"
+  "language": {
+    "en": "Tiếng Anh",
+    "ko": "Tiếng Hàn",
+    "vi": "Tiếng Việt",
+    "mn": "Tiếng Mông Cổ"
+  },
+  "filter": {
+    "intensity": "Cường độ lọc",
+    "personality": "Cá tính",
+    "natural": "Tự nhiên",
+    "pink": "Hoàn hảo",
+    "classic": "Cổ điển",
+    "bw": "Trắng đen",
+    "skin": "Da"
+  },
+  "menu": {
+    "start": "BẮT ĐẦU",
+    "retry": "THỬ LẠI",
+    "reset": "CHỤP LẠI",
+    "back": "QUAY LẠI",
+    "frame": "KHUNG ẢNH",
+    "payment": "THANH TOÁN",
+    "printing": "IN ẢNH",
+    "continue": "TIẾP TỤC",
+    "confirm": "Xác nhận"
+  },
+  "text": {
+    "frame": "Sự cố kỹ thuật khi tải khung",
+    "background": "Sự cố kỹ thuật khi tải hình nền",
+    "layout": "Sự cố kỹ thuật khi tải bố cục",
+    "payment-number": {
+      "title": "Số lượng ảnh",
+      "warning": "Các bản sao thêm sẽ được tính phí",
+      "coupon": "Vui lòng kiểm tra xem bạn có phiếu giảm giá nào không"
     },
-    "home": {
-      "title": "Photomong",
-      "takePhoto": "Bắt đầu chụp",
-      "selectPhoto": "Chọn ảnh",
-      "settings": "Cài đặt"
+    "payment": "VUI LÒNG CHỌN PHƯƠNG THỨC THANH TOÁN",
+    "cash": {
+      "title": "THANH TOÁN",
+      "instruction": "Vui lòng bỏ số tiền chính xác mà bạn muốn thanh toán.",
+      "warning": "Máy này không trả lại tiền.",
+      "toBePaid": "SỐ TIỀN PHẢI TRẢ",
+      "inserted": "ĐÃ NHẬN",
+      "processing": "Đang xử lý thanh toán..."
     },
-    "filter": {
-      "personality": "Cá tính",
-      "natural": "Tự nhiên",
-      "perfect": "Hoàn hảo",
-      "classic": "Cổ điển",
-      "bnw": "Trắng đen",
-      "skin": "Da"
+    "QR": {
+      "title": "QUÉT MÃ QR ĐỂ THANH TOÁN",
+      "instruction": "Quét mã QR bằng điện thoại của bạn",
+      "instruction1": "ứng dụng, nhập số tiền thanh toán bằng loại tiền tệ địa phương, xem lại và nhấp vào thanh toán.",
+      "warning": "Mã QR để thanh toán là duy nhất cho mỗi giao dịch. Không gửi tiền đến cùng một địa chỉ nhiều hơn một lần.",
+      "subtitle": "QUÉT ĐỂ THANH TOÁN",
+      "ad": "Thanh toán nhanh chóng và an toàn",
+      "processing": "Thanh toán thành công! Đang chuyển hướng..."
     },
-    "menu": {
-      "start": "BẮT ĐẦU",
-      "goBack": "QUAY LẠI",
-      "frame": "KHUNG ẢNH",
-      "payment": "THANH TOÁN",
-      "printing": "IN ẢNH",
-      "continue": "TIẾP TỤC",
-      "confirm": "Xác nhận"
+    "Promo": {
+      "title": "NHẬP MÃ KHUYẾN MÃI",
+      "subtitle": "Nhập mã khuyến mãi vào ô trống và chọn 'ÁP DỤNG'. Mã của bạn sẽ được tự động áp dụng cho đơn hàng.",
+      "redeem": "ÁP DỤNG"
     },
-    "brightness": "Độ sáng"
-  }
+    "result": "THANH TOÁN THÀNH CÔNG!",
+    "photo": "NHÌN LÊN VÀ MỈM CƯỜI",
+    "print": "TRÂN TRỌNG CẢM ƠN!"
+  },
+  "brightness": "Độ sáng"
+}

@@ -355,13 +355,13 @@ export default function Choose() {
                                             )}
                                         >
                                             {filter.icon}
-                                            <span className="mt-2 text-sm font-medium">{filter.name}</span>
+                                            <span className="mt-2 text-sm font-medium">{t(`filter.${filter.id}`)}</span>
                                         </motion.button>
                                     ))}
                                 </div>
                             </div>
                             <div className='py-10'>
-                                <h3 className="mb-2 text-sm font-medium">Filter Intensity</h3>
+                                <h3 className="mb-2 text-sm font-medium">{t('filter.intensity')}</h3>
                                 <Slider
                                     value={intensity}
                                     onValueChange={setIntensity}
@@ -375,8 +375,7 @@ export default function Choose() {
                                 disabled={selectedPhotos.length !== maxSelections || transition}
                                 className="mt-4 bg-pink-500 px-8 hover:bg-pink-600 rounded-full text-white"
                             >
-                                Continue with {selectedPhotos.length} photo
-                                {selectedPhotos.length > 1 ? "s" : ""}
+                                {t('menu.continue')}
                             </Button>
                         </div>
                     </div>

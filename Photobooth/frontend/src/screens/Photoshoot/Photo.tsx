@@ -157,7 +157,7 @@ export default function Photoshoot() {
         {/* Message */}
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center">
           <h2 className="text-2xl font-bold tracking-tight text-pink-500">
-            JUST LOOK UP AND SMILE
+            {t('text.photo')}
           </h2>
         </div>
       </div>
@@ -216,7 +216,7 @@ export default function Photoshoot() {
           className='bg-pink-500 hover:bg-pink-600 rounded-full text-white'
         >
           <Trash2 className="mr-2 h-4 w-4" />
-          Reset All
+          {t('menu.reset')}
         </Button>
         <Button 
           onClick={goToSelection}
@@ -224,7 +224,7 @@ export default function Photoshoot() {
           className='bg-pink-500 hover:bg-pink-600 rounded-full text-white'
         >
           <Check className="mr-2 h-4 w-4 " />
-          Continue
+          {t('menu.continue')}
         </Button>
       </div>
     </div>

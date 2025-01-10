@@ -3,7 +3,7 @@ import { ChevronLeft, Loader2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import { playAudio } from "@/lib/utils"
 
@@ -22,6 +22,16 @@ export default function Cash() {
     return !isNaN(parsedSales) ? parsedSales : 0;
   });
 
+  const checkPaymentStatus = useCallback(async() => {
+    try {
+      await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/cash/status`)
+        .then((response) => response.json())
+        .then((data) => setInsertedMoney(data.totalMoney))
+    } catch (error) {
+      console.error("Failed to check status:", error)
+    }
+  }, [])
+
   // Check payment status continuously
   useEffect(() => {
     //NodeJS.Timeout
@@ -37,7 +47,7 @@ export default function Cash() {
     return () => clearInterval(intervalId);
   }, [amountToPay, insertedMoney, checkPaymentStatus]);
 
-  const handlePaymentCompletion = useCallBack(async () => {
+  const handlePaymentCompletion = useCallback(async () => {
     setIsProcessing(true)
     try {
       await Promise.all([
@@ -49,7 +59,7 @@ export default function Cash() {
       console.error("Payment completion failed:", error)
       setIsProcessing(false)
     }
-  });
+  }, [navigate, orderCode]);
 
   // Auto - transition when inserted amount is sufficient
   useEffect(() => {
@@ -90,49 +100,12 @@ export default function Cash() {
     }
   }
 
-  async function checkPaymentStatus(code: string) {
-    try {
-      await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/cash/status`)
-        .then((response) => response.json())
-        .then((data) => setInsertedMoney(data.totalMoney))
-    } catch (error) {
-      console.error("Failed to check status:", error)
-    }
-  }
-
   const handleBack = async (): Promise<void> => {
     try {
       await playAudio('/src/assets/audio/click.wav')
       navigate('/payment')
     } catch (error) {
       console.error('Error handling back:', error)
-    }
-  }
-
-  const translations = {
-    title: {
-      en: "INSERT MONEY",
-      ko: "현금을 넣어주세요",
-      vi: "CHÈN TIỀN",
-      mn: "МӨНГӨ ОРУУЛАХ"
-    },
-    toBePaid: {
-      en: "TO BE PAID",
-      ko: "지불할 금액",
-      vi: "SỐ TIỀN PHẢI TRẢ",
-      mn: "ТӨЛӨХ ДҮНГ"
-    },
-    inserted: {
-      en: "INSERTED",
-      ko: "삽입된 금액",
-      vi: "ĐÃ CHÈN",
-      mn: "ОРУУЛСАН"
-    },
-    processing: {
-      en: "Processing payment...",
-      ko: "결제 처리 중...",
-      vi: "Đang xử lý thanh toán...",
-      mn: "Төлбөр боловсруулж байна..."
     }
   }
 
@@ -151,7 +124,7 @@ export default function Cash() {
             onClick={handleBack}
           >
             <ChevronLeft className="w-5 h-5" />
-            <span>{t('Back')}</span>
+            <span>{t('menu.back')}</span>
           </Button>
         </motion.div>
       </div>
@@ -163,11 +136,11 @@ export default function Cash() {
       >
         <div className="text-center text-pink-500">
           <h1 className="text-3xl font-bold">
-            {translations.title[language]}
+            {t('text.cash.title')}
           </h1>
           <p className="mt-2">
-            Please insert the exact cash you would like to pay.<br />
-            This machine does not return funds.
+            {t('text.cash.instruction')}<br />
+            {t('text.cash.warning')}
           </p>
         </div>
 
@@ -176,7 +149,7 @@ export default function Cash() {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-gray-500">
-                  {translations.toBePaid[language]}
+                  {t('text.cash.toBePaid')}
                 </span>
                 <span className="text-2xl font-bold">
                   ${amountToPay.toFixed(2)}
@@ -184,7 +157,7 @@ export default function Cash() {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-gray-500">
-                  {translations.inserted[language]}
+                  {t('text.cash.inserted')}
                 </span>
                 <motion.span
                   key={insertedMoney}
@@ -210,7 +183,7 @@ export default function Cash() {
             {isProcessing && (
               <div className="flex items-center justify-center text-green-600">
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {translations.processing[language]}
+                {t('text.cash.processing')}
               </div>
             )}
           </CardContent>
@@ -231,8 +204,4 @@ export default function Cash() {
       </motion.div>
     </div>
   )
-}
-
-function useCallBack(arg0: () => Promise<void>) {
-  throw new Error("Function not implemented.")
 }

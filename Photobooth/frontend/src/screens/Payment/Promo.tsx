@@ -58,27 +58,6 @@ export default function Promo() {
         }
     }
 
-    const translations = {
-        title: {
-            en: "ENTER A PROMOTION CODE",
-            ko: "프로모션 코드 입력",
-            vi: "NHẬP MÃ KHUYẾN MÃI",
-            mn: "УРАМШУУЛЛЫН КОД ОРУУЛАХ"
-        },
-        subtitle: {
-            en: "Enter your promotional code in the space provided, and select 'REDEEM'. Your code will be automatically applied to your order.",
-            ko: "프로모션 코드를 입력하고 '사용하기'를 선택하세요. 코드가 자동으로 주문에 적용됩니다.",
-            vi: "Nhập mã khuyến mãi vào ô trống và chọn 'ÁP DỤNG'. Mã của bạn sẽ được tự động áp dụng cho đơn hàng.",
-            mn: "Урамшууллын кодоо оруулаад 'АШИГЛАХ' товчийг дарна уу. Таны код захиалгад автоматаар хэрэглэгдэх болно."
-        },
-        redeem: {
-            en: "REDEEM",
-            ko: "사용하기",
-            vi: "ÁP DỤNG",
-            mn: "АШИГЛАХ"
-        }
-    }
-
     return (
         <div className="fixed inset-0 bg-pink-50 flex flex-col px-1 py-6 mb-48">
             {/* Header Section */}
@@ -94,7 +73,7 @@ export default function Promo() {
                         onClick={handleBack}
                     >
                         <ChevronLeft className="w-5 h-5" />
-                        <span>{t('Back')}</span>
+                        <span>{t('menu.back')}</span>
                     </Button>
                 </motion.div>
             </div>
@@ -107,7 +86,7 @@ export default function Promo() {
                             animate={{ opacity: 1, y: 0 }}
                             className="text-3xl font-bold"
                         >
-                            {translations.title[language]}
+                            {t('text.Promo.title')}
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
@@ -115,7 +94,7 @@ export default function Promo() {
                             transition={{ delay: 0.1 }}
                             className="text-muted-foreground"
                         >
-                            {translations.subtitle[language]}
+                            {t('text.Promo.subtitle')}
                         </motion.p>
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
@@ -148,7 +127,7 @@ export default function Promo() {
                                     onClick={handleSubmit}
                                     disabled={!code || isSubmitting}
                                 >
-                                    {translations.redeem[language]}
+                                    {t('text.Promo.redeem')}
                                 </motion.button>
 
                                 <div className="grid grid-cols-3 gap-2">

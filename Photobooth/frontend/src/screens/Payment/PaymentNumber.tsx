@@ -14,20 +14,20 @@ type Language = 'en' | 'ko' | 'vi' | 'mn'
 
 export default function PaymentNumber() {
     const navigate = useNavigate()
-    const { t } = useTranslation()
+    const { t, i18n } = useTranslation()
     const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en')
     const [photoCount, setPhotoCount] = useState(1)
     const [hasCoupon, setHasCoupon] = useState(false)
 
     const calculatePrice = () => {
-        let basePrice = 80000, additionalPrice = 20000
+        let basePrice = 70000, additionalPrice = 20000
         if (import.meta.env.VITE_BOOTH_TYPE !== "REG") {
             basePrice = 100000
         }
 
         if (language === "mn" && import.meta.env.VITE_LOCATION == "MN") {
-            basePrice = basePrice / 10
-            additionalPrice = (additionalPrice / 10) + 2000
+            basePrice = 10000
+            additionalPrice = 5000
         }
 
         return basePrice + (additionalPrice * (photoCount - 1))
@@ -45,18 +45,21 @@ export default function PaymentNumber() {
     const handleConfirm = async () => {
         // Simulate audio click
         await playAudio('/src/assets/audio/click.wav')
-
+        let addition: number = 0
         // Store values in session
-        sessionStorage.setItem("photoNum", photoCount.toString())
+        if (import.meta.env.VITE_BOOTH_TYPE !== 'REG' && JSON.parse(sessionStorage.getItem('selectedFrame')).frame !== 'Stripx2') {
+            addition = 1
+        }
+        sessionStorage.setItem("photoNum", (photoCount+addition).toString())
         sessionStorage.setItem("sales", calculatePrice().toString())
 
-        await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND}/api/get_print_amount?printAmount=${photoCount}&checkCoupon=${hasCoupon}`, 
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
+        await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND}/api/get_print_amount?printAmount=${photoCount+addition}&checkCoupon=${hasCoupon}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
 
         // Navigate to payment page
         navigate("/payment")
@@ -77,7 +80,7 @@ export default function PaymentNumber() {
                         onClick={handleBack}
                     >
                         <ChevronLeft className="w-5 h-5" />
-                        <span>{t('Back')}</span>
+                        <span>{t('menu.back')}</span>
                     </Button>
                 </motion.div>
             </div>
@@ -89,9 +92,9 @@ export default function PaymentNumber() {
             >
                 <Card className="bg-white rounded-3xl shadow-lg w-full h-full">
                     <CardContent className="pt-6">
-                        <h1 className="text-2xl font-bold text-center mb-2 text-pink-500">Number of Photos</h1>
+                        <h1 className="text-2xl font-bold text-center mb-2 text-pink-500">{t('text.payment-number.title')}</h1>
                         <p className="text-center text-pink-400 mb-8">
-                            (Extra copies will be charged {language==="mn"? `4,000mnt/sheet` : `20,000đ/sheet`})
+                            ({t('text.payment-number.warning')} {language === "mn" ? `4,000mnt/sheet` : `20,000đ/sheet`})
                         </p>
 
                         <div className="flex items-center justify-center gap-4 mb-8">
@@ -128,10 +131,10 @@ export default function PaymentNumber() {
                             <Checkbox
                                 id="coupon"
                                 checked={hasCoupon}
-                                onCheckedChange={(checked:boolean) => setHasCoupon(checked as boolean)}
+                                onCheckedChange={(checked: boolean) => setHasCoupon(checked as boolean)}
                                 className={`border-pink-300 text-pink-500 focus:ring-pink-500 ${hasCoupon ? 'bg-pink-600' : ''}`}
                             />
-                            <Label htmlFor="coupon" className="text-pink-600">Please check if you have any coupons</Label>
+                            <Label htmlFor="coupon" className="text-pink-600">{t('text.payment-number.coupon')}</Label>
                         </div>
 
                         <Button
@@ -139,7 +142,7 @@ export default function PaymentNumber() {
                             size="lg"
                             onClick={handleConfirm}
                         >
-                            Confirm
+                            {t('menu.confirm')}
                         </Button>
                     </CardContent>
                 </Card>

@@ -5,28 +5,61 @@
     "vi": "Vietnamese",
     "mn": "Mongolian"
   },
-  "home": {
-    "title": "Beauty Camera",
-    "takePhoto": "LET'S START",
-    "selectPhoto": "Select a photo",
-    "settings": "Settings"
-  },
   "filter": {
+    "intensity": "Filter Intensity",
     "personality": "Personality",
     "natural": "Natural Look",
-    "perfect": "Perfect Pink",
+    "pink": "Perfect Pink",
     "classic": "Classic",
-    "bnw": "B&W",
+    "bw": "B&W",
     "skin": "Skin Smooth"
   },
   "menu": {
     "start": "START",
-    "goBack": "GO BACK",
+    "retry": "RETRY",
+    "reset": "RESET",
+    "back": "GO BACK",
     "frame": "FRAME",
     "payment": "PAYMENT",
     "printing": "PRINTING",
     "continue": "CONTINUE",
     "confirm": "CONFIRM"
+  },
+  "text": {
+    "frame": "Technical issue in loading frames",
+    "background": "Technical issue in loading backgrounds",
+    "layout": "Technical issue in loading layouts",
+    "payment-number": {
+      "title": "Number of Photos",
+      "warning": "Extra copies will be charged",
+      "coupon": "Please check if you have any coupons"
+    },
+    "payment": "PLEASE SELECT A PAYMENT METHOD",
+    "cash": {
+      "title": "INSERT MONEY",
+      "instruction": "Please insert the exact cash you would like to pay.",
+      "warning": "This machine does not return funds.",
+      "toBePaid": "TO BE PAID",
+      "inserted": "INSERTED",
+      "processing": "Processing payment..."
+    },
+    "QR": {
+      "title": "SCAN QR CODE TO PAY",
+      "instruction": "Scan the QR code with your",
+      "instruction1": "app, enter the payment amount in the local currency, review and click pay.",
+      "warning": "The QR code to pay is unique for each transaction. Do not send funds to the same address more than once.",
+      "subtitle": "SCAN TO PAY",
+      "ad": "Quick and secure payment",
+      "processing": "Payment successful! Redirecting..."
+    },
+    "Promo": {
+      "title": "ENTER A PROMOTION CODE",
+      "subtitle": "Enter your promotional code in the space provided, and select 'REDEEM'. Your code will be automatically applied to your order.",
+      "redeem": "REDEEM"
+    },
+    "result": "PAYMENT SUCCESSFUL!",
+    "photo": "JUST LOOK UP AND SMILE",
+    "print": "THANK YOU!"
   },
   "brightness": "Brightness"
 }

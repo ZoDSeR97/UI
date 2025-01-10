@@ -107,7 +107,7 @@ export default function Layout() {
                         onClick={handleBack}
                     >
                         <ChevronLeft className="w-5 h-5" />
-                        <span>{t('Back')}</span>
+                        <span>{t('menu.back')}</span>
                     </Button>
                 </motion.div>
             </div>

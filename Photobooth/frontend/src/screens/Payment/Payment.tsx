@@ -18,8 +18,7 @@ type Language = 'en' | 'ko' | 'vi' | 'mn'
 
 export default function Payment() {
   const navigate = useNavigate()
-  const { t } = useTranslation()
-  const [selectedMethod, setSelectedMethod] = useState<string | null>(null)
+  const { t, i18n } = useTranslation()
   const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en')
   const [hoveredMethod, setHoveredMethod] = useState<string | null>(null)
   
@@ -51,7 +50,6 @@ export default function Payment() {
 
   const handlePaymentSelect = async(method: string) => {
     await playAudio('/src/assets/audio/click.wav')
-    setSelectedMethod(method)
     navigate(`/payment-${method}`)
   }
 
@@ -78,7 +76,7 @@ export default function Payment() {
             onClick={handleBack}
           >
             <ChevronLeft className="w-5 h-5" />
-            <span>{t('Back')}</span>
+            <span>{t('menu.back')}</span>
           </Button>
         </motion.div>
       </div>
@@ -86,7 +84,7 @@ export default function Payment() {
         {/* Main Content */}
         <div className="text-center">
           <h1 className="mb-16 text-5xl font-bold tracking-tight text-pink-500">
-            PLEASE SELECT A PAYMENT METHOD
+            {t('text.payment')}
           </h1>
 
           <motion.div

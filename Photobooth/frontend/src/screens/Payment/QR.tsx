@@ -17,7 +17,7 @@ type Language = 'en' | 'ko' | 'vi' | 'mn'
 
 export default function QR({ method }: QRPaymentProps) {
     const navigate = useNavigate()
-    const { t } = useTranslation()
+    const { t, i18n } = useTranslation()
     const [qrCode, setQrCode] = useState<string | null>(null)
     const [orderCode, setOrderCode] = useState<string | null>(null)
     const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en')
@@ -115,7 +115,7 @@ export default function QR({ method }: QRPaymentProps) {
                         onClick={handleBack}
                     >
                         <ChevronLeft className="w-5 h-5" />
-                        <span>{t('Back')}</span>
+                        <span>{t('menu.back')}</span>
                     </Button>
                 </motion.div>
             </div>
@@ -126,9 +126,9 @@ export default function QR({ method }: QRPaymentProps) {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-center space-y-4"
                 >
-                    <h1 className="text-4xl font-bold tracking-tight text-pink-500">SCAN QR CODE TO PAY</h1>
+                    <h1 className="text-4xl font-bold tracking-tight text-pink-500">{t('text.QR.title')}</h1>
                     <p className="text-pink-500">
-                        Scan the QR code with your {method} app, enter the payment amount in the local currency, review and click pay.
+                        {t('text.QR.instruction')} {method} {t('text.QR.instruction1')}
                     </p>
                 </motion.div>
 
@@ -176,8 +176,8 @@ export default function QR({ method }: QRPaymentProps) {
                                 <div className="flex items-center space-x-4">
                                     <Smartphone className="h-8 w-8 text-pink-400" />
                                     <div className="space-y-1">
-                                        <h2 className="text-xl font-semibold text-pink-500">SCAN TO PAY</h2>
-                                        <p className="text-sm text-pink-400">Quick and secure payment</p>
+                                        <h2 className="text-xl font-semibold text-pink-500">{t('text.QR.subtitle')}</h2>
+                                        <p className="text-sm text-pink-400">{t('text.QR.ad')}</p>
                                     </div>
                                 </div>
                             </CardContent>
@@ -186,7 +186,7 @@ export default function QR({ method }: QRPaymentProps) {
                         <Alert className="bg-pink-100 border-pink-200">
                             <AlertCircle className="h-4 w-4 text-pink-500" />
                             <AlertDescription className="ml-2 text-pink-500">
-                                The QR code to pay is unique for each transaction. Do not send funds to the same address more than once.
+                                {t('text.QR.warning')}
                             </AlertDescription>
                         </Alert>
 
@@ -198,7 +198,7 @@ export default function QR({ method }: QRPaymentProps) {
                                     exit={{ opacity: 0, y: -10 }}
                                 >
                                     <Alert className="bg-green-100 border-green-200">
-                                        <AlertDescription className="text-green-600">Payment successful! Redirecting...</AlertDescription>
+                                        <AlertDescription className="text-green-600">{t('text.QR.processing')}</AlertDescription>
                                     </Alert>
                                 </motion.div>
                             )}

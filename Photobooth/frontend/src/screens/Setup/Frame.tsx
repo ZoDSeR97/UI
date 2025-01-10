@@ -28,9 +28,9 @@ interface FrameData {
 }
 
 export default function Frame(): JSX.Element {
-    const { t } = useTranslation()
+    const { t, i18n } = useTranslation()
     const navigate = useNavigate()
-    const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en')
+    const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language))
     const [frames, setFrames] = useState<FrameData[]>([])
     const [selectedFrames, setSelectedFrames] = useState<string[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -39,7 +39,9 @@ export default function Frame(): JSX.Element {
     useEffect(() => {
         playAudio('/src/assets/audio/choose_frame_layout.wav')
         fetchFrames()
-    }, [])
+        console.log(language)
+        i18n.changeLanguage(language);
+    }, [i18n, language])
 
     const fetchFrames = async (): Promise<void> => {
         try {
@@ -92,8 +94,8 @@ export default function Frame(): JSX.Element {
         return (
             <div className="flex items-center justify-center h-screen">
                 <div className="text-red-500 text-center">
-                    <p>{t('Technical issue in loading frames')}: {error}</p>
-                    <Button onClick={fetchFrames} className="mt-4">{t('Retry')}</Button>
+                    <p>{t('text.frame')}: {error}</p>
+                    <Button onClick={fetchFrames} className="mt-4">{t('menu.retry')}</Button>
                 </div>
             </div>
         )
@@ -114,7 +116,7 @@ export default function Frame(): JSX.Element {
                         onClick={handleBack}
                     >
                         <ChevronLeft className="w-5 h-5" />
-                        <span>{t('Back')}</span>
+                        <span>{t('menu.back')}</span>
                     </Button>
                 </motion.div>
             </div>

@@ -38,92 +38,74 @@ function Home() {
 
     return (
         <div className="flex flex-col items-center justify-between min-h-screen bg-white p-6">
-            <motion.div
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="w-full flex justify-end"
-            >
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="bg-pink-100 text-pink-500 border-pink-200 rounded-full hover:bg-pink-300 hover:text-pink-600">
-                            <Globe className="mr-2 h-4 w-4" />
-                            {t(`language.${language}`)}
-                            <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => handleChangeLanguage('en')}>
-                            {t('language.en')}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleChangeLanguage('ko')}>
-                            {t('language.ko')}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleChangeLanguage('vi')}>
-                            {t('language.vi')}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleChangeLanguage('mn')}>
-                            {t('language.mn')}
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full flex justify-end"
+      >
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="bg-pink-100 text-pink-500 border-pink-200 rounded-full hover:bg-pink-300 hover:text-pink-600 text-lg">
+              <Globe className="mr-2 h-4 w-4" />
+              {t(`language.${language}`)}
+              <ChevronDown className="ml-2 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="bg-pink-100 text-pink-500 border-pink-200 hover:bg-pink-300 hover:text-pink-600 rounded ">
+            <DropdownMenuItem onClick={() => handleChangeLanguage('en')} className='text-lg hover:bg-pink-300'>
+              <Globe className="mr-2 h-4 w-4" />
+              {t('language.en')}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleChangeLanguage('ko')} className='text-lg hover:bg-pink-300'>
+              <Globe className="mr-2 h-4 w-4" />
+              {t('language.ko')}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleChangeLanguage('vi')} className='text-lg hover:bg-pink-300'>
+              <Globe className="mr-2 h-4 w-4" />
+              {t('language.vi')}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleChangeLanguage('mn')} className='text-lg hover:bg-pink-300'>
+              <Globe className="mr-2 h-4 w-4" />
+              {t('language.mn')}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </motion.div>
 
-            <motion.div
-                className="flex-grow flex items-center justify-center"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-            >
-                <div className="text-pink-500 font-bold relative text-center">
-                    <motion.div
-                        className="text-3xl mb-2"
-                        initial={{ y: -20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.2, duration: 0.3 }}
-                    >
-                        PHOTO
-                    </motion.div>
-                    <div className="text-7xl">
-                        M
-                        <span className="inline-block relative">
-                            <svg viewBox="0 0 100 100" className="w-24 h-24 fill-current inline-block">
-                                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="10" />
-                                <rect x="30" y="30" width="40" height="40" rx="5" />
-                                <circle cx="50" cy="50" r="15" />
-                                <motion.circle cx="75" cy="25" r="8" fill="white" 
-                                    animate={{
-                                        cx: [75, 25, 25, 75, 75],
-                                        cy: [25, 25, 75, 75, 25],
-                                    }}
-                                    transition={{
-                                        duration: 4,
-                                        repeat: Infinity,
-                                        ease: "linear",
-                                    }}
-                                />
-                            </svg>
-                        </span>
-                        NG
-                    </div>
-                </div>
-            </motion.div>
-
-            <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.5 }}
-            >
-                <Button
-                    className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-10 px-20 rounded-full text-xl mb-20"
-                    onClick={handleStart}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                >
-                    {t('start')}
-                </Button>
-            </motion.div>
+      <motion.div
+        className="flex-grow flex"
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="relative w-full h-full flex items-center justify-center top-40">
+          <motion.div animate={{ y: [0, -10, 0], }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", }}>
+            <img 
+              src="/src/assets/icon/logo.svg" 
+              alt="Logo" 
+              className="w-full h-[50vh]" 
+              width={10}
+              height={10}
+            />
+          </motion.div>
         </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.5 }}
+        className='absolute bottom-32'
+      >
+        <Button
+          className="bg-pink-400 hover:bg-pink-600 text-white font-bold py-14 px-20 rounded-full text-[4.25rem]"
+          onClick={handleStart}
+        >
+          {t(`menu.start`)}
+        </Button>
+      </motion.div>
+    </div>
     );
 }
 
