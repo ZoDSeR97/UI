@@ -23,7 +23,7 @@ interface IconElement {
 }
 
 export default function Sticker() {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -291,7 +291,7 @@ export default function Sticker() {
                 onClick={printFrameWithSticker}
                 className="absolute left-3/4 top-1/2 mt-4 bg-pink-500 px-8 hover:bg-pink-600 rounded-full text-white"
             >
-                Print
+                {t("text.sticker")}
             </Button>
             <IconCarousel onSelectIcon={handleAddIcon} />
         </div>
