@@ -10,12 +10,9 @@ import { Button } from '@/components/ui/button';
 
 import Confetti from 'react-confetti'
 
-type Language = 'en' | 'ko' | 'vi' | 'mn'
-
-export default function PrintPage() {
+export default function Print() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en');
     const [confettiActive, setConfettiActive] = useState(true);
 
     useEffect(() => {
@@ -46,7 +43,7 @@ export default function PrintPage() {
         return (
             <QRCodeSVG
                 value={myImage}
-                size={160}
+                size={250}
             />
         )
     }
@@ -137,15 +134,7 @@ export default function PrintPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
                     >
-                        <Button
-                            onClick={clearSessionStorageAndLeaveOut}
-                            className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-6 text-xl rounded-full font-bold tracking-wide transform transition-all duration-200 hover:scale-105 active:scale-95"
-                        >
-                            <div className="absolute bottom-0 right-0">
-                                <QRCodeComponent />
-                                {/* <GifQRCodeComponent /> */}
-                            </div>
-                        </Button>
+                        <QRCodeComponent />
                     </motion.div>
                 </motion.div>
             </Card>

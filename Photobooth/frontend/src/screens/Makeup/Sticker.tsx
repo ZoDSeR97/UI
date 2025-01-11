@@ -187,8 +187,7 @@ export default function Sticker() {
             ]);
 
             // Handle upload response
-            const uploadData = uploadResponse.data;
-            const qrVal = uploadData.photo_url;
+            const qrVal = uploadResponse.photo_url;
             if (qrVal) {
                 sessionStorage.setItem('uploadedCloudPhotoUrl', qrVal);
             }

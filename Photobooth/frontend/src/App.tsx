@@ -14,8 +14,8 @@ import Result from './screens/Payment/Result';
 import Photoshoot from './screens/Photoshoot/Photo';
 import Choose from './screens/Photoshoot/Choose';
 import Sticker from './screens/Makeup/Sticker';
-/* import Print from './screens/Print';
-import Landing from './screens/Landing'; */
+import Print from './screens/Print';
+/* import Landing from './screens/Landing'; */
 
 function App() {
   return (
@@ -36,8 +36,8 @@ function App() {
       <Route path="/photo" element={<Photoshoot />} />
       <Route path="/photo-choose" element={<Choose />} />
       <Route path="/sticker" element={<Sticker />} />
-      {/* <Route path="/print" element={<Print />} />
-      <Route path="/landing" element={<Landing />} /> */}
+      <Route path="/print" element={<Print />} />
+      {/* <Route path="/landing" element={<Landing />} /> */}
 
       {/* default redirect to home page */}
       <Route path="*" element={<Navigate to="/" />} />
