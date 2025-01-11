@@ -84,7 +84,7 @@ export default function QR({ method }: QRPaymentProps) {
             }
         }
 
-        const interval = setInterval(checkPaymentStatus, 2000)
+        const interval = setInterval(checkPaymentStatus, 1000)
         return () => clearInterval(interval)
     }, [orderCode, method, backendUrl, navigate, invoice])
 
