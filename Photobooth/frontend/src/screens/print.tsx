@@ -6,17 +6,10 @@ import { playAudio } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { Apple, Banana, Camera, Gift } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
-<<<<<<< HEAD
 import Confetti from 'react-confetti'
 
 export default function Print() {
-=======
-import Confetti from 'react-confetti';
-
-export default function PrintPage() {
->>>>>>> 63e21cce0081829f72fae562fce2e302bfac42b5
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [confettiActive, setConfettiActive] = useState(true);
