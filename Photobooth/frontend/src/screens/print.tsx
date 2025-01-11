@@ -54,7 +54,6 @@ export default function PrintPage() {
         console.log("!@#");
         console.log(myImage);
         // myImage = str(myImage).replace("get_photo","download_photo")
-        console.log(myImage);
         return (
             <QRCodeSVG
                 value={myImage}
