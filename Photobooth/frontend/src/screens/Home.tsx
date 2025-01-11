@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import i18n from '/src/translations/i18n';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button"
 import {
@@ -16,14 +15,14 @@ import { playAudio } from "@/lib/utils"
 function Home() {
     const [language, setLanguage] = useState('en');
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     useEffect(() => {
         sessionStorage.clear();
         setLanguage('en');
         sessionStorage.setItem('language', 'en');
         i18n.changeLanguage('en');
-    }, []);
+    }, [i18n]);
 
     const handleChangeLanguage = (value: string) => {
         setLanguage(value);

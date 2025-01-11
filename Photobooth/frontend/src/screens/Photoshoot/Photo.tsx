@@ -85,11 +85,23 @@ export default function Photoshoot() {
     }
   };
 
+  const startRecording = async() => {
+    await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/start_recording`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uuid: uuid })
+      }
+    )
+  }
+
   // Countdown and photo capture logic
   useEffect(() => {
     if (uuid && countdown > 0) {
-      if (countdown == 5)
+      if (countdown == 5){
         playAudio("/src/assets/audio/count.wav");
+        /* startRecording(); */
+      }
       const timer = setTimeout(() => setCountdown(prev => prev - 1), 1000)
       return () => clearTimeout(timer)
     } else if (countdown === 0) {
@@ -209,24 +221,22 @@ export default function Photoshoot() {
         </div>
       </div>
       {/* Action Buttons */}
-      <div className="flex justify-between bg-pink-50 text-pink-500">
-        <Button 
+      <Button 
           onClick={() => setPhotos([])}
           disabled={photos.length < 8 || isCapturing || selectedRetake !== null}
-          className='bg-pink-500 hover:bg-pink-600 rounded-full text-white'
+          className='absolute top-1/2 left-40 bg-pink-500 hover:bg-pink-600 rounded-full text-white'
         >
-          <Trash2 className="mr-2 h-4 w-4" />
+          <Trash2 className="h-full w-full" />
           {t('menu.reset')}
         </Button>
         <Button 
           onClick={goToSelection}
           disabled={photos.length < 8 || isCapturing || selectedRetake !== null}
-          className='bg-pink-500 hover:bg-pink-600 rounded-full text-white'
+          className='absolute top-1/2 right-40 bg-pink-500 hover:bg-pink-600 rounded-full text-white'
         >
-          <Check className="mr-2 h-4 w-4 " />
+          <Check className="h-full w-full" />
           {t('menu.continue')}
         </Button>
-      </div>
     </div>
   )
 }

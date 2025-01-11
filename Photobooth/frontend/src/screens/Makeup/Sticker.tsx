@@ -201,7 +201,7 @@ export default function Sticker() {
             }
 
             // Navigate after successful operations
-            //navigate("/print");
+            navigate("/print");
         } catch (error) {
             console.error("Error during upload and print:", error);
         }
