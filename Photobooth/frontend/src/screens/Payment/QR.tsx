@@ -13,14 +13,11 @@ interface QRPaymentProps {
     method: string
 }
 
-type Language = 'en' | 'ko' | 'vi' | 'mn'
-
 export default function QR({ method }: QRPaymentProps) {
     const navigate = useNavigate()
     const { t, i18n } = useTranslation()
     const [qrCode, setQrCode] = useState<string | null>(null)
     const [orderCode, setOrderCode] = useState<string | null>(null)
-    const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en')
     const [paymentStatus, setPaymentStatus] = useState<string | null>(null)
     const [invoice, setInvoice] = useState(null);
 

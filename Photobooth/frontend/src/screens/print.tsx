@@ -8,14 +8,11 @@ import { Card } from '@/components/ui/card';
 import { Apple, Banana, Camera, Gift } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-import Confetti from 'react-confetti'
-
-type Language = 'en' | 'ko' | 'vi' | 'mn'
+import Confetti from 'react-confetti';
 
 export default function PrintPage() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en');
     const [confettiActive, setConfettiActive] = useState(true);
 
     useEffect(() => {
@@ -39,9 +36,9 @@ export default function PrintPage() {
 
     const QRCodeComponent = () => {
         const myImage = sessionStorage.getItem('uploadedCloudPhotoUrl');
-        console.log("!@#");
-        console.log("!@#");
-        console.log(myImage);
+        //console.log("!@#");
+        //console.log("!@#");
+        //console.log(myImage);
         // myImage = myImage.replace("get_photo","download_photo")
         return (
             <QRCodeSVG
@@ -55,7 +52,7 @@ export default function PrintPage() {
         console.log("!@#");
         console.log("!@#");
         console.log("!@#");
-        // console.log(myImage);;
+        console.log(myImage);
         // myImage = str(myImage).replace("get_photo","download_photo")
         console.log(myImage);
         return (

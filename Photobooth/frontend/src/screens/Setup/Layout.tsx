@@ -13,8 +13,6 @@ import {
 import { Button } from "@/components/ui/button"
 import { cn, playAudio } from '@/lib/utils'
 
-type Language = 'en' | 'ko' | 'vi' | 'mn'
-
 interface LayoutData {
     title: string
     photo: string
@@ -23,9 +21,8 @@ interface LayoutData {
 }
 
 export default function Layout() {
-    const { t } = useTranslation()
+    const { t, i18n } = useTranslation()
     const navigate = useNavigate()
-    const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en')
     const [layouts, setLayouts] = useState<LayoutData[]>([])
     const [selectedLayout, setSelectedLayout] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
