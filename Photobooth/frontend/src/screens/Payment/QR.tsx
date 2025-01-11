@@ -64,17 +64,17 @@ export default function QR({ method }: QRPaymentProps) {
                                 "order_code": orderCode,
                             })
                         });
-                    const paymentData = await response.json();
-                    sessionStorage.setItem('orderCodeNum', paymentData.order_code);
-                    if (paymentData.status === "Success") {
+                    const data = await response.json();
+                    if (data.status === "Success") {
+                        sessionStorage.setItem('orderCodeNum', data.order_code);
                         clearInterval(interval);
                         navigate("/payment-result");
                     }
                 } else {
                     const response = await fetch(`${backendUrl}/${method}/api/webhook?order=${orderCode}`)
                     const data = await response.json()
-                    sessionStorage.setItem('orderCodeNum', data.order_code);
                     if (data.status === "Success") {
+                        sessionStorage.setItem('orderCodeNum', data.order_code);
                         clearInterval(interval);
                         navigate("/payment-result");
                     }
