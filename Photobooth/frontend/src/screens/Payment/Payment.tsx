@@ -14,12 +14,9 @@ interface PaymentMethod {
   icon_hover: string
 }
 
-type Language = 'en' | 'ko' | 'vi' | 'mn'
-
 export default function Payment() {
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
-  const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en')
   const [hoveredMethod, setHoveredMethod] = useState<string | null>(null)
   
   const paymentMethods: PaymentMethod[] = [

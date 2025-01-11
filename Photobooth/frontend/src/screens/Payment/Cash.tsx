@@ -7,12 +7,9 @@ import { useEffect, useState, useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import { playAudio } from "@/lib/utils"
 
-type Language = 'en' | 'ko' | 'vi' | 'mn'
-
 export default function Cash() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en')
   const [insertedMoney, setInsertedMoney] = useState(0)
   const [isProcessing, setIsProcessing] = useState(false)
   const [orderCode, setOrderCode] = useState<string | null>(null)

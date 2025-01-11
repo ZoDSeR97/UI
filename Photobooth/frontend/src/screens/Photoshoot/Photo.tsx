@@ -14,18 +14,15 @@ import {
 } from "@/components/ui/carousel"
 import { v4 as uuidv4 } from 'uuid';
 
-type Language = 'en' | 'ko' | 'vi' | 'mn'
-
 interface Photo {
   id: number
   url: string
 }
 
 export default function Photoshoot() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en');
   const [countdown, setCountdown] = useState(5);
   const [isCapturing, setIsCapturing] = useState(false);
   const [selectedRetake, setSelectedRetake] = useState<number | null>(null);

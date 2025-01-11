@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -15,8 +13,6 @@ import {
 import { Button } from "@/components/ui/button"
 import { cn, playAudio } from '@/lib/utils'
 
-type Language = 'en' | 'ko' | 'vi' | 'mn'
-
 interface FrameData {
     id: number
     title: string
@@ -30,7 +26,6 @@ interface FrameData {
 export default function Frame(): JSX.Element {
     const { t, i18n } = useTranslation()
     const navigate = useNavigate()
-    const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language))
     const [frames, setFrames] = useState<FrameData[]>([])
     const [selectedFrames, setSelectedFrames] = useState<string[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -39,9 +34,7 @@ export default function Frame(): JSX.Element {
     useEffect(() => {
         playAudio('/src/assets/audio/choose_frame_layout.wav')
         fetchFrames()
-        console.log(language)
-        i18n.changeLanguage(language);
-    }, [i18n, language])
+    }, [])
 
     const fetchFrames = async (): Promise<void> => {
         try {

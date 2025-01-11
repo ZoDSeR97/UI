@@ -9,8 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toBlob } from 'html-to-image';
 
-type Language = 'en' | 'ko' | 'vi' | 'mn'
-
 interface Photo {
     id: number
     url: string
@@ -83,10 +81,9 @@ const filters: Filter[] = [
 ]
 
 export default function Choose() {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const nodeRef = useRef(null);
-    const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en');
     const [selectedFrame, setSelectedFrame] = useState<string | null>(null);
     const [myBackground, setMyBackground] = useState<string | null>(null);
     const [selectedLayout, setSelectedLayout] = useState<string | null>(null);

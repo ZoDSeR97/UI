@@ -9,13 +9,10 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { playAudio } from '@/lib/utils'
 
-type Language = 'en' | 'ko' | 'vi' | 'mn'
-
 export default function Promo() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [code, setCode] = useState("")
-    const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en')
     const [frameAmount, setFrameAmount] = useState((sessionStorage.getItem('sales'))||'0')
     const [isSubmitting, setIsSubmitting] = useState(false)
 

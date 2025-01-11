@@ -9,12 +9,9 @@ import { playAudio } from "@/lib/utils"
 
 import Confetti from 'react-confetti'
 
-type Language = 'en' | 'ko' | 'vi' | 'mn'
-
 export default function Result() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en');
   const [confettiActive, setConfettiActive] = useState(true);
 
   useEffect(() => {
