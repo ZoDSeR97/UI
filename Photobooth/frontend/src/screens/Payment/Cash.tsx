@@ -23,7 +23,7 @@ export default function Cash() {
     try {
       await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/cash/status`)
         .then((response) => response.json())
-        .then((data) => setInsertedMoney(data.totalMoney))
+        .then((data) => setInsertedMoney(data.total_money))
     } catch (error) {
       console.error("Failed to check status:", error)
     }
@@ -89,7 +89,11 @@ export default function Cash() {
 
       await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/cash/start`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ amount: amountToPay }),
+        redirect: "follow",
       }).then((response) => response.text())
         .then((result) => console.log(result))
     } catch (error) {

@@ -23,6 +23,7 @@ export default function Photoshoot() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [gifs, setGifs] = useState<Photo[]>([]);
   const [countdown, setCountdown] = useState(5);
   const [isCapturing, setIsCapturing] = useState(false);
   const [selectedRetake, setSelectedRetake] = useState<number | null>(null);
@@ -47,23 +48,32 @@ export default function Photoshoot() {
   const capturePhoto = async () => {
     await sleep(100);
     setIsCapturing(true);
-    await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/capture`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ uuid: uuid })
-      }
-    )
+    await Promise.all([
+      await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/stop_recording`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ uuid: uuid })
+        }
+      ),
+      await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/capture`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ uuid: uuid })
+        }
+      )
+    ]);
     const data = await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/get_photo?uuid=${uuid}`).then(res => res.json())
     if (data && data.images && data.images.length > 0) {
       const latestImage = data.images[data.images.length - 1];
-      if (data.videos != undefined) {
-        if (data.videos.length != 0) {
-          const videoUrl = data.videos[0].url
-          sessionStorage.setItem("videoUrl", videoUrl)
-        }
-      }
+      const latestGif = data.videos[data.videos.length - 1]
       if (selectedRetake !== null) {
+        setGifs(prev => {
+          const newGifs = [...prev]
+          newGifs[selectedRetake] = latestGif
+          return newGifs
+        })
         // Replace photo at selected index
         setPhotos(prev => {
           const newPhotos = [...prev]
@@ -72,9 +82,11 @@ export default function Photoshoot() {
         })
         setSelectedRetake(null)
       } else {
-        if (photos.length < 8)
+        if (photos.length < 8){
           // Add new photo
           setPhotos(prev => [...prev, latestImage])
+          setGifs(prev => [...prev, latestGif])
+        }
       }
       setIsCapturing(false)
     } else {
@@ -95,14 +107,14 @@ export default function Photoshoot() {
   // Countdown and photo capture logic
   useEffect(() => {
     if (uuid && countdown > 0) {
-      if (countdown == 5){
+      if (countdown === 5){
         playAudio("/src/assets/audio/count.wav");
-        /* startRecording(); */
+        startRecording();
       }
       const timer = setTimeout(() => setCountdown(prev => prev - 1), 1000)
       return () => clearTimeout(timer)
     } else if (countdown === 0) {
-      capturePhoto()
+      capturePhoto();
     }
   }, [countdown, uuid])
 
@@ -127,6 +139,7 @@ export default function Photoshoot() {
       sessionStorage.setItem("uuid", uuid);
 
       sessionStorage.setItem('photos', JSON.stringify(photos));
+      sessionStorage.setItem('gifs', JSON.stringify(gifs));
 
       await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/stop_live_view`)
       navigate("/photo-choose");
@@ -159,7 +172,7 @@ export default function Photoshoot() {
         {/* Cute Character */}
         <div className="absolute bottom-8 left-8">
           <motion.div animate={{ y: [0, -10, 0], }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", }}>
-            <img src="/src/assets/icon/mascot.svg" alt="Mascot" className="h-[150px] w-[150px]" />
+            <img loading='lazy' src="/src/assets/icon/mascot.svg" alt="Mascot" className="h-[150px] w-[150px]" />
           </motion.div>
         </div>
 
@@ -176,7 +189,6 @@ export default function Photoshoot() {
         <div className="py-4 bg-pink-50">
           <Carousel 
             opts={{
-              align: "start",
               loop: true,
             }}
             className="w-full bg-pink-50">
@@ -188,6 +200,7 @@ export default function Photoshoot() {
                     {photos[index] ? (
                       <>
                         <img 
+                          loading='lazy'
                           src={photos[index].url} 
                           alt={`Photo ${index + 1}`} 
                           className="h-full w-full object-cover transform-gpu -scale-x-100"
@@ -196,7 +209,10 @@ export default function Photoshoot() {
                           <Button 
                             size="icon" 
                             variant="secondary" 
-                            onClick={() => handleRetake(index)}
+                            onClick={() => {
+                              playAudio("/src/assets/audio/click.wav")
+                              handleRetake(index)
+                            }}
                             disabled={photos.length < 8 || isCapturing || selectedRetake !== null}
                           >
                             <Repeat className="h-4 w-4 " />
@@ -219,9 +235,12 @@ export default function Photoshoot() {
       </div>
       {/* Action Buttons */}
       <Button 
-          onClick={() => setPhotos([])}
+          onClick={() => {
+            playAudio("/src/assets/audio/click.wav")
+            setPhotos([])
+          }}
           disabled={photos.length < 8 || isCapturing || selectedRetake !== null}
-          className='absolute top-1/2 left-28 bg-pink-500 hover:bg-pink-600 rounded-full text-white'
+          className='absolute top-1/2 left-20 bg-pink-500 hover:bg-pink-600 rounded-full text-white'
         >
           <Trash2 className="h-full w-full" />
           {t('menu.reset')}
@@ -229,7 +248,7 @@ export default function Photoshoot() {
         <Button 
           onClick={goToSelection}
           disabled={photos.length < 8 || isCapturing || selectedRetake !== null}
-          className='absolute top-1/2 right-28 bg-pink-500 hover:bg-pink-600 rounded-full text-white'
+          className='absolute top-1/2 right-20 bg-pink-500 hover:bg-pink-600 rounded-full text-white'
         >
           <Check className="h-full w-full" />
           {t('menu.continue')}

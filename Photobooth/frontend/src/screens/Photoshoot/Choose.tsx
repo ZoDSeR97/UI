@@ -1,16 +1,21 @@
-import { useEffect, useState, useRef } from 'react';
-import { motion, AnimatePresence } from "framer-motion";
-import { Heart, ImageIcon, Moon, Sparkles, Sun, Loader, Star } from 'lucide-react'
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { motion, AnimatePresence, frame } from "framer-motion";
+import { Heart, ImageIcon, Moon, Sparkles, Sun, Star } from 'lucide-react'
 import { cn, playAudio } from "@/lib/utils";
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Slider } from "@/components/ui/slider";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { toBlob } from 'html-to-image';
 
 interface Photo {
     id: number
+    url: string
+}
+
+interface Gif {
+    id: number
+    name: string
     url: string
 }
 
@@ -33,7 +38,7 @@ const filters: Filter[] = [
         name: "Personality",
         icon: <Sparkles className="h-6 w-6" />,
         effect: [
-            { property: 'blur', value: "0.8", unit: "px" },
+            { property: 'blur', value: "0.1", unit: "px" },
             { property: "saturate", value: "1.2", unit: "" },
             { property: "contrast", value: "1.1", unit: "" },
             { property: "brightness", value: "1.1", unit: "" },
@@ -83,10 +88,10 @@ const filters: Filter[] = [
         name: "Skin Smooth & Glow",
         icon: <Star className="h-6 w-6" />,
         effect: [
-            { property: "blur", value: "3", unit: "px" },
+            { property: "blur", value: "0.1", unit: "px" },
             { property: "brightness", value: "1.2", unit: "" },
             { property: "saturate", value: "1.1", unit: "" },
-            { property: "contrast", value: "1.05", unit: "" },
+            { property: "contrast", value: "1.1", unit: "" },
             { property: "hue-rotate", value: "10", unit: "deg" },
         ]
     }
@@ -95,8 +100,8 @@ const filters: Filter[] = [
 export default function Choose() {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
-    const nodeRef = useRef(null);
-    const [selectedFrame, setSelectedFrame] = useState<string | null>(null);
+    const canvasRef = useRef(null);
+    const [selectedFrame, setSelectedFrame] = useState<string | null>(JSON.parse(sessionStorage.getItem('selectedFrame')).frame);
     const [myBackground, setMyBackground] = useState<string | null>(null);
     const [selectedLayout, setSelectedLayout] = useState<string | null>(null);
     const [selectedPhotos, setSelectedPhotos] = useState<number[]>([]);
@@ -104,30 +109,11 @@ export default function Choose() {
     const [intensity, setIntensity] = useState([50])
     const [filterStyle, setFilterStyle] = useState<string>("")
     const [selectedFilter, setSelectedFilter] = useState<string>("");
-    const uuid = sessionStorage.getItem("uuid");
     const photos: Photo[] = JSON.parse(sessionStorage.getItem('photos'));
+    const gifs: Gif[] = JSON.parse(sessionStorage.getItem('gifs'));
     const [transition, setTransition] = useState(false);
 
-    const blobToBase64 = (blob: Blob): Promise<string> => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                resolve(reader.result as string); // The result will be a Base64 string
-            };
-            reader.onerror = (error) => {
-                reject(error);
-            };
-            reader.readAsDataURL(blob); // Converts the blob to Base64
-        });
-    };
-
     useEffect(() => {
-        // Retrieve selected frame from session storage
-        const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame'));
-        if (storedSelectedFrame) {
-            setSelectedFrame(storedSelectedFrame.frame);
-        }
-
         if (selectedFrame === 'Stripx2') {
             setMaxSelections(8);
         } else if (selectedFrame === '2cut-x2') {
@@ -165,6 +151,117 @@ export default function Choose() {
         }
     }, [selectedFilter, intensity])
 
+    const getGridConfig = useCallback(() => {
+        // Define grid configurations for each frame type
+        if (selectedFrame === "Stripx2") {
+            return [
+                { x: 1330, y: 240, width: 1030, height: 730 },
+                { x: 130, y: 240, width: 1030, height: 730 },
+                { x: 1330, y: 1020, width: 1030, height: 730 },
+                { x: 130, y: 1020, width: 1030, height: 730 },
+                { x: 1330, y: 1810, width: 1030, height: 730 },
+                { x: 130, y: 1810, width: 1030, height: 730 },
+                { x: 1330, y: 2590, width: 1030, height: 730 },
+                { x: 130, y: 2590, width: 1030, height: 730 },
+            ];
+        }
+        else if (selectedFrame === "6-cutx2") {
+            return [
+                { x: 1290, y: 150, width: 1020, height: 1000 },
+                { x: 190, y: 150, width: 1020, height: 1000 },
+                { x: 1290, y: 1230, width: 1020, height: 1000 },
+                { x: 190, y: 1230, width: 1020, height: 1000 },
+                { x: 1290, y: 2300, width: 1020, height: 1000 },
+                { x: 190, y: 2300, width: 1020, height: 1000 },
+            ];
+        }
+        else if (selectedFrame === "4-cutx2") {
+            return [
+                { x: 1910, y: 210, width: 1290, height: 980 },
+                { x: 490, y: 210, width: 1290, height: 980 },
+                { x: 1910, y: 1290, width: 1290, height: 980 },
+                { x: 490, y: 1290, width: 1290, height: 980 },
+            ];
+        }
+        else if (selectedFrame === "4.1-cutx2") {
+            return [
+                { x: 1310, y: 470, width: 1040, height: 1350 },
+                { x: 160, y: 470, width: 1040, height: 1350 },
+                { x: 1310, y: 1920, width: 1040, height: 1350 },
+                { x: 160, y: 1920, width: 1040, height: 1350 },
+            ];
+        }
+        else {
+            return [
+                { x: 1800, y: 230, width: 1770, height: 1870 },
+                { x: 60, y: 230, width: 1770, height: 1870 },
+            ];
+        }
+    }, [selectedFrame]);
+
+    const drawPhotos = useCallback((ctx: CanvasRenderingContext2D) => {
+        const gridConfig = getGridConfig();
+        selectedPhotos.forEach((photoId, index) => {
+            const photo = photos.find(p => p.id === photoId);
+            if (photo) {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.onload = () => {
+                    const { x, y, width, height } = gridConfig[index];
+                    ctx.save();
+                    ctx.filter = filterStyle;
+                    ctx.transform(-1, 0, 0, 1, canvasRef.current.width, 0)
+                    ctx.drawImage(img, x, y, width, height);
+                    ctx.restore();
+                };
+                img.src = photo.url;
+            }
+        });
+        const layoutImg = new Image();
+        layoutImg.crossOrigin = "Anonymous";
+        layoutImg.onload = () => {
+            ctx.drawImage(layoutImg, 0, 0, ctx.canvas.width, ctx.canvas.height);
+        };
+        layoutImg.src = selectedLayout;
+    }, [filterStyle, getGridConfig, photos, selectedLayout, selectedPhotos]);
+
+    const renderCanvas = useCallback((ctx: CanvasRenderingContext2D) => {
+        const isHorizontal = selectedFrame === "2cut-x2" || selectedFrame === "4-cutx2";
+        const canvasWidth = isHorizontal ? 3690 : 2478;
+        const canvasHeight = isHorizontal ? 2478 : 3690;
+
+        ctx.canvas.width = canvasWidth;
+        ctx.canvas.height = canvasHeight;
+
+        // Clear the canvas
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+        // Draw background
+        if (myBackground) {
+            const bgImg = new Image();
+            bgImg.crossOrigin = "Anonymous";
+            bgImg.onload = () => {
+                ctx.save();
+                ctx.drawImage(bgImg, 0, 0, canvasWidth, canvasHeight);
+                drawPhotos(ctx);
+                ctx.restore();
+            };
+            bgImg.src = myBackground;
+        } else {
+            drawPhotos(ctx);
+        }
+    }, [drawPhotos, myBackground, selectedFrame]);
+
+    useEffect(() => {
+        if (canvasRef.current) {
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                renderCanvas(ctx);
+            }
+        }
+    }, [selectedPhotos, selectedFrame, filterStyle, renderCanvas, selectedLayout]);
+
     const adjustValue = (value: string, intensity: number): string => {
         const numValue = parseFloat(value)
         const adjustedValue = 1 + (numValue - 1) * (intensity / 100)
@@ -187,20 +284,28 @@ export default function Choose() {
     const goToSticker = async () => {
         playAudio("/src/assets/audio/click.wav")
         sessionStorage.setItem('choosePhotos', JSON.stringify(selectedPhotos));
-        if (!nodeRef.current || transition) return;
+        if (!canvasRef.current || transition) return;
         setTransition(true);
+        renderCanvas(canvasRef.current.getContext('2d'));
         try {
-            const blob = await toBlob(nodeRef.current, {
-                cacheBust: true, // Prevent caching issues
-            });
+            await Promise.all([
+                // Get image data
+                Promise.resolve(canvasRef.current.toDataURL("image/jpeg")).then(img =>
+                    sessionStorage.setItem('photo', img)
+                ),
 
-            if (!blob) {
-                throw new Error('Failed to create blob');
-            }
-
-            const base64String = await blobToBase64(blob);
-            sessionStorage.setItem('photo', base64String);
-
+                // API call
+                fetch(`${import.meta.env.VITE_REACT_APP_API}/api/create-gif`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "frame": selectedFrame,
+                        "gifs": selectedPhotos.map(photoId => gifs.filter(gif => gif.id === photoId)[0].name)
+                    })
+                })
+            ]);
             navigate("/sticker");
         } catch (error) {
             setTransition(false);
@@ -234,15 +339,16 @@ export default function Choose() {
                                                     )}
                                                 >
                                                     <img
+                                                        loading='lazy'
                                                         src={photo.url}
                                                         alt={`Photo ${photo.id}`}
-                                                        className="h-full w-full object-cover transform-gpu -scale-x-100 transition-transform group-hover:scale-105"
+                                                        className="h-full w-full object-cover transform-gpu -scale-x-100 transition-transform"
                                                     />
                                                     {isSelected && (
                                                         <motion.div
                                                             initial={{ opacity: 0, scale: 0.5 }}
                                                             animate={{ opacity: 1, scale: 1 }}
-                                                            className="absolute right-2 top-2 rounded-full bg-pink-500 p-1"
+                                                            className="absolute right-2 top-2 rounded-full bg-pink-500 p-1 transform-gpu -scale-x-100"
                                                         >
                                                             <Heart className="h-4 w-4 text-white" fill="white" />
                                                         </motion.div>
@@ -256,76 +362,19 @@ export default function Choose() {
                         </Card>
 
                         {/* Preview Section */}
-                        <Card className={`relative overflow-hidden w-[644px] ${selectedFrame === "2cut-x2" || selectedFrame === "4-cutx2" ? "h-[432px]" : "h-[940px]"}`}>
+                        <Card className={`relative overflow-hidden w-[642px] ${selectedFrame === "2cut-x2" || selectedFrame === "4-cutx2" ? "h-[430px]" : "h-[938px]"}`}>
                             <CardContent className="p-6">
                                 <div className="overflow-hidden rounded-lg bg-pink-50">
-                                    <div
-                                        className='absolute inset-0'
-                                        ref={nodeRef}
+                                    <canvas
+                                        ref={canvasRef}
                                         style={{
-                                            backgroundImage: `url(${myBackground})`,
-                                            backgroundRepeat: `no-repeat`
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'contain',
                                         }}
-                                    >
-                                        {selectedPhotos.length > 0 &&
-                                            <div
-                                                className={`grid ${selectedFrame === "Stripx2"
-                                                    ? "grid-rows-4 grid-cols-2 mt-[65px] gap-[1.23rem]"
-                                                    : selectedFrame === "6-cutx2"
-                                                        ? "grid-rows-3 grid-cols-2 gap-6 mt-[42px]"
-                                                        : selectedFrame === "4-cutx2"
-                                                            ? "grid-rows-2 grid-cols-2 gap-3 mt-[36px]"
-                                                            : selectedFrame === "4.1-cutx2"
-                                                                ? "grid-rows-2 grid-cols-2 gap-7 mt-[121px]"
-                                                                : selectedFrame === "2cut-x2"
-                                                                    ? "grid-rows-1 grid-cols-2  gap-5 mt-[42px]"
-                                                                    : "grid-cols-1"
-                                                    }`}
-                                            >
-                                                {selectedPhotos.map((i, index) => (
-                                                    <div
-                                                        key={index}
-                                                        className={`relative aspect-auto ${selectedFrame === "Stripx2"
-                                                            ? `max-w-[312px] max-h-[182px]  ${index % 2 === 0 ? "left-2" : "right-4"}`
-                                                            : selectedFrame === "6-cutx2"
-                                                                ? `w-[260px] h-[252px] ${index % 2 === 0 ? "left-11" : "right-1"}`
-                                                                : selectedFrame === "4-cutx2"
-                                                                    ? `w-[226px] h-[174px] ${index % 2 === 0 ? "left-20" : "left-1"}`
-                                                                    : selectedFrame === "4.1-cutx2"
-                                                                        ? `w-[262px] h-[347px] ${index % 2 === 0 ? "left-10" : "left-0"}`
-                                                                        : selectedFrame === "2cut-x2"
-                                                                            ? `w-[311px] h-[318px] ${index % 2 === 0 ? "left-3" : "right-5"}`
-                                                                            : `max-w-[312px] max-h-[182px] ${index % 2 === 0 ? "left-2" : "right-4"}`
-                                                            } overflow-hidden rounded-lg`}
-                                                    >
-                                                        <img
-                                                            src={photos[i].url}
-                                                            alt="Selected photo"
-                                                            className="h-full w-full object-cover transform-gpu -scale-x-100"
-                                                            style={{ filter: filterStyle }}
-                                                        />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        }
-                                        <div
-                                            className='absolute inset-0'
-                                            style={{
-                                                backgroundImage: `url(${selectedLayout})`,
-                                                backgroundSize: `${selectedFrame === "Stripx2"
-                                                    ? "638px"
-                                                    : selectedFrame === "6-cutx2"
-                                                        ? "638px"
-                                                        : selectedFrame === "4-cutx2" || selectedFrame === "4.1-cutx2"
-                                                            ? "638px"
-                                                            : selectedFrame === "2cut-x2"
-                                                                ? "638px"
-                                                                : "638px"
-                                                    }`,
-                                                backgroundRepeat: `no-repeat`
-                                            }}
-                                        ></div>
-                                    </div>
+                                        width={2478}
+                                        height={3690}
+                                    />
                                 </div>
                             </CardContent>
                         </Card>
@@ -371,29 +420,9 @@ export default function Choose() {
                                 size="lg"
                                 onClick={goToSticker}
                                 disabled={selectedPhotos.length !== maxSelections || transition}
-                                className="mt-4 bg-pink-500 px-8 hover:bg-pink-600 rounded-full text-white relative"
+                                className="mt-4 bg-pink-500 px-8 hover:bg-pink-600 rounded-full text-white"
                             >
-                                <AnimatePresence mode="wait">
-                                    {transition ? (
-                                        <motion.div
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                            className="flex items-center gap-2"
-                                        >
-                                            <Loader className="h-4 w-4 animate-spin" />
-                                            {t('menu.processing')}
-                                        </motion.div>
-                                    ) : (
-                                        <motion.span
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                        >
-                                            {t('menu.continue')}
-                                        </motion.span>
-                                    )}
-                                </AnimatePresence>
+                                {t('menu.continue')}
                             </Button>
                         </div>
                     </div>

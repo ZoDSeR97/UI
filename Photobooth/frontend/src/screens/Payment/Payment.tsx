@@ -27,7 +27,7 @@ export default function Payment() {
   ]
 
   const filteredPaymentMethods = paymentMethods.filter(method =>
-    method.id !== (import.meta.env.LOCATION === 'MN' ? 'momo' : 'qpay')
+    method.id !== (import.meta.env.VITE_LOCATION === 'MN' ? 'momo' : 'qpay')
   )
 
   const container = {

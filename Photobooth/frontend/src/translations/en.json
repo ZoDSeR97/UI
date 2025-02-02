@@ -23,8 +23,7 @@
     "payment": "PAYMENT",
     "printing": "PRINTING",
     "continue": "CONTINUE",
-    "confirm": "CONFIRM",
-    "processing": "PROCESSING"
+    "confirm": "CONFIRM"
   },
   "text": {
     "frame": "Technical issue in loading frames",

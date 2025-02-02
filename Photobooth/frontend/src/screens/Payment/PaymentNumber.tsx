@@ -18,13 +18,14 @@ export default function PaymentNumber() {
     const [language, setLanguage] = useState<Language>((sessionStorage.getItem('language') as Language) || 'en')
     const [photoCount, setPhotoCount] = useState(1)
     const [hasCoupon, setHasCoupon] = useState(false)
+    const [selectedFrame, setSelectedFrame] = useState(JSON.parse(sessionStorage.getItem('selectedFrame')).frame)
 
     const calculatePrice = () => {
         let basePrice = 70000, additionalPrice = 20000
         if (import.meta.env.VITE_BOOTH_TYPE !== "REG") {
-            basePrice = 100000
+            basePrice = 80000
         }
-
+        
         if (language === "mn" && import.meta.env.VITE_LOCATION == "MN") {
             basePrice = 10000
             additionalPrice = 5000
@@ -47,20 +48,20 @@ export default function PaymentNumber() {
         await playAudio('/src/assets/audio/click.wav')
         let addition: number = 0
         // Store values in session
-        if (import.meta.env.VITE_BOOTH_TYPE !== 'REG' && JSON.parse(sessionStorage.getItem('selectedFrame')).frame !== 'Stripx2') {
+        if (import.meta.env.VITE_BOOTH_TYPE !== 'REG' && selectedFrame !== 'Stripx2') {
             addition = 1
         }
-        sessionStorage.setItem("photoNum", (photoCount+addition).toString())
+        const quantity = photoCount + addition
+        sessionStorage.setItem("photoNum", quantity.toString())
         sessionStorage.setItem("sales", calculatePrice().toString())
 
-        await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND}/api/get_print_amount?printAmount=${photoCount+addition}&checkCoupon=${hasCoupon}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
+        await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/get_print_amount?printAmount=${quantity}&checkCoupon=${hasCoupon}`,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
         // Navigate to payment page
         navigate("/payment")
     }
@@ -94,14 +95,17 @@ export default function PaymentNumber() {
                     <CardContent className="pt-6">
                         <h1 className="text-2xl font-bold text-center mb-2 text-pink-500">{t('text.payment-number.title')}</h1>
                         <p className="text-center text-pink-400 mb-8">
-                            ({t('text.payment-number.warning')} {language === "mn" ? `4,000mnt/sheet` : `20,000đ/sheet`})
+                            ({t('text.payment-number.warning')} {language === "mn" ? `4,000mnt/хуудас` : `20,000đ/tấm`})
                         </p>
 
                         <div className="flex items-center justify-center gap-4 mb-8">
                             <Button
                                 variant="outline"
                                 size="icon"
-                                onClick={() => setPhotoCount(c => Math.max(1, c - 1))}
+                                onClick={() => {
+                                    playAudio("/src/assets/audio/click.wav")
+                                    setPhotoCount(c => Math.max(1, c - 1))
+                                }}
                                 className="h-20 w-20 rounded-full border-pink-300 text-pink-500 hover:bg-pink-100 hover:text-pink-600"
                             >
                                 <Minus className="h-6 w-6" />
@@ -114,7 +118,10 @@ export default function PaymentNumber() {
                             <Button
                                 variant="outline"
                                 size="icon"
-                                onClick={() => setPhotoCount(c => Math.min(10, c + 1))}
+                                onClick={() => {
+                                    playAudio("/src/assets/audio/click.wav")
+                                    setPhotoCount(c => Math.min(10, c + 1))
+                                }}
                                 className="h-20 w-20 rounded-full border-pink-300 text-pink-500 hover:bg-pink-100 hover:text-pink-600"
                             >
                                 <Plus className="h-6 w-6" />

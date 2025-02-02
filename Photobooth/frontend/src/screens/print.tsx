@@ -35,10 +35,6 @@ export default function Print() {
 
     const QRCodeComponent = () => {
         const myImage = sessionStorage.getItem('uploadedCloudPhotoUrl');
-        //console.log("!@#");
-        //console.log("!@#");
-        //console.log(myImage);
-        // myImage = myImage.replace("get_photo","download_photo")
         return (
             <QRCodeSVG
                 value={myImage}
@@ -52,11 +48,10 @@ export default function Print() {
         console.log("!@#");
         console.log("!@#");
         console.log(myImage);
-        // myImage = str(myImage).replace("get_photo","download_photo")
         return (
             <QRCodeSVG
                 value={myImage}
-                size={160}
+                size={250}
             />
         )
     }
@@ -131,8 +126,10 @@ export default function Print() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
+                        className='flex gap-40'
                     >
                         <QRCodeComponent />
+                        <GifQRCodeComponent />
                     </motion.div>
                 </motion.div>
             </Card>

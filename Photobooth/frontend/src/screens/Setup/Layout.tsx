@@ -63,6 +63,13 @@ export default function Layout() {
             await playAudio('/src/assets/audio/click.wav')
             setSelectedLayout(layout.title)
             sessionStorage.setItem('selectedLayout', JSON.stringify(layout))
+            await fetch(`${import.meta.env.VITE_REACT_APP_API}/api/get_template`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({"url": layout.photo_full})
+            })
             navigate('/payment-number')
         } catch (error) {
             console.error('Error handling layout selection:', error)

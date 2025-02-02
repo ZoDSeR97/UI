@@ -20,8 +20,6 @@ export function IconCarousel({ onSelectIcon }: IconCarouselProps) {
     const [themes, setThemes] = useState<Theme[]>([])
 
     useEffect(() => {
-        // In a real application, you would load these from your assets directory
-        // This is a mock example
         setThemes([
             {
                 name: 'cartoon',
@@ -44,7 +42,7 @@ export function IconCarousel({ onSelectIcon }: IconCarouselProps) {
 
     return (
         <Carousel
-            className="w-full max-w-sm"
+            className="w-full max-w-lg"
             opts={{
                 align: "start",
                 loop: true,
@@ -53,7 +51,7 @@ export function IconCarousel({ onSelectIcon }: IconCarouselProps) {
             <CarouselContent>
                 {themes.flatMap(theme =>
                     theme.icons.map((icon, index) => (
-                        <CarouselItem key={`${theme.name}-${index}`} className="basis-1/5">
+                        <CarouselItem key={`${theme.name}-${index}`} className="basis-1/6">
                             <button
                                 onClick={() => onSelectIcon(icon)}
                                 className="w-full aspect-square border rounded-lg p-2 hover:bg-gray-100 transition-colors"

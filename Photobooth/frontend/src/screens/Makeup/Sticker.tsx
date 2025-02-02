@@ -32,13 +32,23 @@ export default function Sticker() {
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
     const [canvasScale, setCanvasScale] = useState(1);
     const [uuid, setUuid] = useState(sessionStorage.getItem("uuid") || null);
-    const [selectedFrame, setSelectedFrame] = useState(null);
+    const [selectedFrame, setSelectedFrame] = useState(JSON.parse(sessionStorage.getItem('selectedFrame')).frame);
+    const [printing, setPrinting] = useState<boolean>(false);
     const [photo, setPhoto] = useState(sessionStorage.getItem('photo'));
 
     useEffect(() => {
-        // Retrieve selected frame from session storage
-        setSelectedFrame(JSON.parse(sessionStorage.getItem('selectedFrame')).frame);
+        const updateCanvasScale = () => {
+            if (canvasRef.current) {
+                const scale = canvasRef.current.offsetWidth / canvasRef.current.width;
+                setCanvasScale(scale);
+            }
+        };
+        updateCanvasScale();
+        window.addEventListener('click', updateCanvasScale);
+        return () => window.removeEventListener('click', updateCanvasScale);
+    }, []);
 
+    useEffect(() => {
         const canvas = canvasRef.current
         const container = containerRef.current
         if (!canvas || !container) return
@@ -53,9 +63,14 @@ export default function Sticker() {
             const img = new Image()
             img.src = photo
             img.onload = () => {
-                canvas.width = img.width
-                canvas.height = img.height
-                context.drawImage(img, 0, 0)
+                if (selectedFrame === "Stripx2" || selectedFrame === "6-cutx2" || selectedFrame === "4.1-cutx2"){
+                    canvas.width = 2478
+                    canvas.height = 3690
+                } else {
+                    canvas.width = 3690
+                    canvas.height = 2478
+                }
+                context.drawImage(img, 0, 0, canvas.width, canvas.height)
 
                 // Calculate scale factor between actual canvas size and displayed size
                 const scale = canvas.offsetWidth / img.width
@@ -63,9 +78,10 @@ export default function Sticker() {
             }
         } else {
             setPhoto(sessionStorage.getItem('photo'))
+            setSelectedFrame(JSON.parse(sessionStorage.getItem('selectedFrame')).frame)
         }
         playAudio('/src/assets/audio/add_emoji.wav')
-    }, [photo])
+    }, [photo, selectedFrame])
 
     useEffect(() => {
         if (!ctx || !canvasRef.current) return
@@ -80,7 +96,7 @@ export default function Sticker() {
             const img = new Image()
             img.src = photo
             img.onload = () => {
-                ctx.drawImage(img, 0, 0)
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
 
                 // Draw all icons
                 icons.forEach(icon => {
@@ -103,20 +119,23 @@ export default function Sticker() {
         const canvas = canvasRef.current
         if (!canvas) return
 
+        playAudio("/src/assets/audio/click.wav")
+        
         const newIcon: IconElement = {
             id: Math.random().toString(36).slice(2, 9),
             src: iconSrc,
             position: { x: canvas.width / 2, y: canvas.height / 2 },
             rotation: 0,
             scale: 1,
-            width: 100,
-            height: 100,
+            width: 400,
+            height: 400,
         }
         setIcons([...icons, newIcon])
         setSelectedIcon(newIcon.id)
     }
 
     const handleIconClick = (id: string) => {
+        playAudio("/src/assets/audio/click.wav")
         setSelectedIcon(selectedIcon === id ? null : id)
     }
 
@@ -127,27 +146,30 @@ export default function Sticker() {
     }
 
     const handleIconRotate = (id: string, rotation: number) => {
+        playAudio("/src/assets/audio/click.wav")
         setIcons(icons.map(icon =>
             icon.id === id ? { ...icon, rotation } : icon
         ))
     }
 
     const handleIconDelete = (id: string) => {
+        playAudio("/src/assets/audio/click.wav")
         setIcons(icons.filter(icon => icon.id !== id))
         setSelectedIcon(null)
     }
 
     const printFrameWithSticker = async (event) => {
-        if (selectedIcon){
+        if (selectedIcon || printing){
             setSelectedIcon(null)
             return
         }
+        setPrinting(true);
+        playAudio("/src/assets/audio/click.wav")
         try {
             if (!canvasRef.current) {
                 console.error("Stage reference is not available");
                 return;
             }
-
             const originalDataURL = canvasRef.current.toDataURL();
             const blobBin = atob(originalDataURL.split(',')[1]);
             const array = [];
@@ -156,15 +178,11 @@ export default function Sticker() {
             }
             const newFile = new Blob([new Uint8Array(array)], { type: 'image/png' });
 
-            // Prepare FormData for both requests
-            const uploadFormData = new FormData();
-            uploadFormData.append("photo", originalDataURL);
-            uploadFormData.append("order_code", sessionStorage.getItem('orderCodeNum'));
-
             const printFormData = new FormData();
             printFormData.append("photo", newFile);
             printFormData.append("uuid", uuid);
             printFormData.append("frame", selectedFrame);
+            printFormData.append("order_code", sessionStorage.getItem('orderCodeNum'))
 
             // function for fetch requests
             const postFormData = async (url: string | URL | Request, formData: FormData) => {
@@ -181,28 +199,27 @@ export default function Sticker() {
             };
 
             // Run both requests in parallel
-            const [uploadResponse, printResponse] = await Promise.all([
-                postFormData(`${import.meta.env.VITE_REACT_APP_BACKEND}/frames/api/upload_cloud`, uploadFormData),
+            const [uploadResponse] = await Promise.all([
                 postFormData(`${import.meta.env.VITE_REACT_APP_API}/api/print`, printFormData)
             ]);
-
-            // Handle upload response
-            const qrVal = uploadResponse.photo_url;
-            if (qrVal) {
-                sessionStorage.setItem('uploadedCloudPhotoUrl', qrVal);
-            }
-
             // Handle print response
-            if (printResponse.ok) {
-                console.log(`Print job started successfully.`);
-            } else {
+            if (!uploadResponse.ok) {
                 console.error(`Failed to start print job.`);
             }
+
+            // Handle upload response
+            const qrVal = uploadResponse.response.photo_url;
+            const qrGif = uploadResponse.response.gif_url;
+            if (qrVal)
+                sessionStorage.setItem('uploadedCloudPhotoUrl', qrVal);
+            if (qrGif) 
+                sessionStorage.setItem('gifPhoto', qrGif);
 
             // Navigate after successful operations
             navigate("/print");
         } catch (error) {
             console.error("Error during upload and print:", error);
+            setPrinting(false);
         }
     };
 
@@ -211,9 +228,11 @@ export default function Sticker() {
             <div ref={containerRef} className="relative border-2 border-gray-200 rounded-lg">
                 <canvas
                     ref={canvasRef}
-                    className="max-w-full h-auto"
-                    width={800}
-                    height={800}
+                    className={selectedFrame === 'Stripx2' || selectedFrame === '6-cutx2' || selectedFrame === '4.1-cutx2'
+                        ?`w-[642px] h-[938px]`
+                        :`w-[642px] h-[430px]`}
+                    width = {2478}
+                    height = {3690}
                 />
                 <div className="absolute inset-0">
                     {icons.map(icon => {
@@ -243,8 +262,8 @@ export default function Sticker() {
                                     dragMomentum={false}
                                     onDragEnd={(_, info) => {
                                         const canvas = canvasRef.current!
-                                        const newX = (icon.position.x + info.offset.x) * canvasScale
-                                        const newY = (icon.position.y + info.offset.y) * canvasScale
+                                        const newX = icon.position.x + info.offset.x/ canvasScale
+                                        const newY = icon.position.y + info.offset.y/ canvasScale
 
                                         // Constrain within canvas boundaries
                                         const halfWidth = (icon.width * icon.scale) / 2
@@ -287,6 +306,7 @@ export default function Sticker() {
             </div>
             <Button
                 size="lg"
+                disabled={printing}
                 onClick={printFrameWithSticker}
                 className="absolute left-3/4 top-1/2 mt-4 bg-pink-500 px-8 hover:bg-pink-600 rounded-full text-white"
             >
