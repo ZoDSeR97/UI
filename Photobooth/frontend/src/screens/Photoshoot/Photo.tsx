@@ -221,7 +221,7 @@ export default function Photoshoot() {
       <Button 
           onClick={() => setPhotos([])}
           disabled={photos.length < 8 || isCapturing || selectedRetake !== null}
-          className='absolute top-1/2 left-40 bg-pink-500 hover:bg-pink-600 rounded-full text-white'
+          className='absolute top-1/2 left-28 bg-pink-500 hover:bg-pink-600 rounded-full text-white'
         >
           <Trash2 className="h-full w-full" />
           {t('menu.reset')}
@@ -229,7 +229,7 @@ export default function Photoshoot() {
         <Button 
           onClick={goToSelection}
           disabled={photos.length < 8 || isCapturing || selectedRetake !== null}
-          className='absolute top-1/2 right-40 bg-pink-500 hover:bg-pink-600 rounded-full text-white'
+          className='absolute top-1/2 right-28 bg-pink-500 hover:bg-pink-600 rounded-full text-white'
         >
           <Check className="h-full w-full" />
           {t('menu.continue')}

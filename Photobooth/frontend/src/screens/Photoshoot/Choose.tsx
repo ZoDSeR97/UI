@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, ImageIcon, Moon, Sparkles, Sun } from 'lucide-react'
+import { Heart, ImageIcon, Moon, Sparkles, Sun, Loader, Star } from 'lucide-react'
 import { cn, playAudio } from "@/lib/utils";
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -77,6 +77,18 @@ const filters: Filter[] = [
             { property: "grayscale", value: "1", unit: "" },
             { property: "brightness", value: "1.1", unit: "" },
         ]
+    },
+    {
+        id: "skin",
+        name: "Skin Smooth & Glow",
+        icon: <Star className="h-6 w-6" />,
+        effect: [
+            { property: "blur", value: "3", unit: "px" },
+            { property: "brightness", value: "1.2", unit: "" },
+            { property: "saturate", value: "1.1", unit: "" },
+            { property: "contrast", value: "1.05", unit: "" },
+            { property: "hue-rotate", value: "10", unit: "deg" },
+        ]
     }
 ]
 
@@ -93,9 +105,21 @@ export default function Choose() {
     const [filterStyle, setFilterStyle] = useState<string>("")
     const [selectedFilter, setSelectedFilter] = useState<string>("");
     const uuid = sessionStorage.getItem("uuid");
-    const [photo, setPhoto] = useState<Blob | null>(null);
     const photos: Photo[] = JSON.parse(sessionStorage.getItem('photos'));
     const [transition, setTransition] = useState(false);
+
+    const blobToBase64 = (blob: Blob): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                resolve(reader.result as string); // The result will be a Base64 string
+            };
+            reader.onerror = (error) => {
+                reject(error);
+            };
+            reader.readAsDataURL(blob); // Converts the blob to Base64
+        });
+    };
 
     useEffect(() => {
         // Retrieve selected frame from session storage
@@ -130,14 +154,6 @@ export default function Choose() {
     }, [selectedFrame]);
 
     useEffect(() => {
-        if (selectedPhotos.length === maxSelections && nodeRef.current) {
-            // Convert the DOM node to a Blob
-            const blob = toBlob(nodeRef.current);
-            setPhoto(blob);
-        }
-    }, [maxSelections, selectedPhotos.length])
-
-    useEffect(() => {
         if (selectedFilter) {
             const filter = filters.find(f => f.id === selectedFilter)
             if (filter) {
@@ -157,8 +173,6 @@ export default function Choose() {
 
     const handlePhotoClick = (id: number) => {
         playAudio("/src/assets/audio/click.wav")
-        console.log("pressed")
-        console.log(selectedPhotos)
         if (selectedPhotos.indexOf(id) === -1 && selectedPhotos.length < maxSelections) {
             if (selectedFrame === 'Stripx2') {
                 setSelectedPhotos([...selectedPhotos, id, id]);
@@ -176,31 +190,18 @@ export default function Choose() {
         if (!nodeRef.current || transition) return;
         setTransition(true);
         try {
-            // Convert the DOM node to a Blob
-            await toBlob(nodeRef.current).then(blob => {
-                // Convert the Blob to a Base64 string for session storage
-                const reader = new FileReader();
-                reader.readAsDataURL(blob);
-                reader.onloadend = () => {
-                    const base64data = reader.result;
-                    sessionStorage.setItem('photo', base64data);
-                    navigate("/sticker");
-                };
+            const blob = await toBlob(nodeRef.current, {
+                cacheBust: true, // Prevent caching issues
             });
-            
-            // Create a FormData object to upload
-            //const formData = new FormData();
-            //formData.append('photo', blob);
 
-            // Send the Blob to the Flask server (fire-and-forget)
-            /* fetch(`${import.meta.env.VITE_REACT_APP_API}/api/uploads`, {
-                method: 'POST',
-                body: formData,
-            }).catch(error => {
-                console.error('Error uploading image:', error);
-            });
-        
-            console.log('Request sent without waiting for response'); */
+            if (!blob) {
+                throw new Error('Failed to create blob');
+            }
+
+            const base64String = await blobToBase64(blob);
+            sessionStorage.setItem('photo', base64String);
+
+            navigate("/sticker");
         } catch (error) {
             setTransition(false);
             console.error('Error capturing image:', error);
@@ -255,7 +256,7 @@ export default function Choose() {
                         </Card>
 
                         {/* Preview Section */}
-                        <Card className={`relative overflow-hidden w-[644px] ${selectedFrame === "2cut-x2" || selectedFrame === "4-cutx2"? "h-[432px]":"h-[940px]"}`}>
+                        <Card className={`relative overflow-hidden w-[644px] ${selectedFrame === "2cut-x2" || selectedFrame === "4-cutx2" ? "h-[432px]" : "h-[940px]"}`}>
                             <CardContent className="p-6">
                                 <div className="overflow-hidden rounded-lg bg-pink-50">
                                     <div
@@ -275,7 +276,7 @@ export default function Choose() {
                                                         : selectedFrame === "4-cutx2"
                                                             ? "grid-rows-2 grid-cols-2 gap-3 mt-[36px]"
                                                             : selectedFrame === "4.1-cutx2"
-                                                                ? "grid-rows-2 grid-cols-2 gap-7 mt-[121px]" 
+                                                                ? "grid-rows-2 grid-cols-2 gap-7 mt-[121px]"
                                                                 : selectedFrame === "2cut-x2"
                                                                     ? "grid-rows-1 grid-cols-2  gap-5 mt-[42px]"
                                                                     : "grid-cols-1"
@@ -370,9 +371,29 @@ export default function Choose() {
                                 size="lg"
                                 onClick={goToSticker}
                                 disabled={selectedPhotos.length !== maxSelections || transition}
-                                className="mt-4 bg-pink-500 px-8 hover:bg-pink-600 rounded-full text-white"
+                                className="mt-4 bg-pink-500 px-8 hover:bg-pink-600 rounded-full text-white relative"
                             >
-                                {t('menu.continue')}
+                                <AnimatePresence mode="wait">
+                                    {transition ? (
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            className="flex items-center gap-2"
+                                        >
+                                            <Loader className="h-4 w-4 animate-spin" />
+                                            {t('menu.processing')}
+                                        </motion.div>
+                                    ) : (
+                                        <motion.span
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                        >
+                                            {t('menu.continue')}
+                                        </motion.span>
+                                    )}
+                                </AnimatePresence>
                             </Button>
                         </div>
                     </div>
